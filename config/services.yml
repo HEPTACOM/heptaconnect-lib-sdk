@@ -1,0 +1,17 @@
+services:
+    Heptacom\HeptaConnect\Sdk\Console\Command\Install:
+        tags:
+            - { name: 'console.command' }
+        arguments:
+            - '%env(DATABASE_URL)%'
+            - '%kernel.vendor_dir%'
+            - '@cache.object'
+            - '@monolog.logger'
+            - '@Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry'
+            - !tagged_iterator shopware.migration_source
+
+    Shopware\Core\Framework\Store\Services\OpenSSLVerifier:
+        arguments:
+            -
+                - '%kernel.vendor_dir%/shopware/platform/src/Core/Framework/Store/public.key'
+                - '%kernel.vendor_dir%/shopware/core/Framework/Store/public.key'
