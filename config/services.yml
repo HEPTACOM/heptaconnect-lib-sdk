@@ -19,6 +19,10 @@ services:
             - '@Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry'
             - !tagged_iterator shopware.migration_source
 
+    Heptacom\HeptaConnect\Sdk\Console\Command\Init:
+        arguments:
+            - '%kernel.vendor_dir%'
+
     Shopware\Core\Framework\Store\Services\OpenSSLVerifier:
         arguments:
             -
