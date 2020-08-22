@@ -1,7 +1,16 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        Symfony\Component\Console\Command\Command:
+            tags: ['console.command']
+
+    Heptacom\HeptaConnect\Sdk\:
+        resource: '../src/*'
+
     Heptacom\HeptaConnect\Sdk\Console\Command\Install:
-        tags:
-            - { name: 'console.command' }
         arguments:
             - '%env(DATABASE_URL)%'
             - '%kernel.vendor_dir%'
