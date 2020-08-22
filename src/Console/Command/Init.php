@@ -48,17 +48,20 @@ class Init extends Command
 
         switch ($packageType) {
             case self::KEYWORD_DATASET:
-                $nameSuggestion = 'heptaconnect-new-dataset';
+                $this->getPackageName($io, 'heptaconnect-new-dataset', $composerJson);
+                $this->getNamespace($io, $composerJson);
                 $this->addDependency('heptacom/heptaconnect-dataset-base', '@dev', $composerJson);
 
                 break;
             case self::KEYWORD_PORTAL:
-                $nameSuggestion = 'heptaconnect-new-portal';
+                $this->getPackageName($io, 'heptaconnect-new-portal', $composerJson);
+                $this->getNamespace($io, $composerJson);
                 $this->addDependency('heptacom/heptaconnect-portal-base', '@dev', $composerJson);
 
                 break;
             case self::KEYWORD_STORAGE:
-                $nameSuggestion = 'heptaconnect-new-storage';
+                $this->getPackageName($io, 'heptaconnect-new-storage', $composerJson);
+                $this->getNamespace($io, $composerJson);
                 $this->addDependency('heptacom/heptaconnect-storage-base', '@dev', $composerJson);
 
                 break;
@@ -68,11 +71,7 @@ class Init extends Command
                 return 1;
         }
 
-        if ($composerJson['name'] === 'heptacom/heptaconnect-skeleton') {
-            $this->getPackageName($io, $nameSuggestion, $composerJson);
-        }
-
-        file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT));
+        file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT) . PHP_EOL);
 
         return 0;
     }
@@ -104,8 +103,39 @@ class Init extends Command
 
     protected function getPackageName(SymfonyStyle $io, string $nameSuggestion, array &$composerJson): string
     {
+        if ($composerJson['name'] !== 'heptacom/heptaconnect-skeleton') {
+            return $composerJson['name'];
+        }
+
         $nameSuggestion = get_current_user() . '/' . $nameSuggestion;
 
         return $composerJson['name'] = (string) $io->ask('Please give your package a name.', $nameSuggestion);
+    }
+
+    protected function getNamespace(SymfonyStyle $io, array &$composerJson): string
+    {
+        if (isset($composerJson['autoload']['psr-4']) && !empty($composerJson['autoload']['psr-4'])) {
+            return (string) key($composerJson['autoload']['psr-4']);
+        }
+
+        $suggestion = join('\\', array_map(function (string $name): string {
+            $name = str_replace(['-', '_'], ' ', $name);
+            $name = ucwords($name);
+
+            return str_replace(' ', '', $name);
+        }, explode('/', $composerJson['name'])));
+
+        $namespace = (string) $io->ask('Please specify a PSR-4 compliant namespace.', $suggestion);
+        $namespace = trim($namespace, '\\') . '\\';
+
+        $composerJson['autoload']['psr-4'][$namespace] = 'src/';
+
+        $sourceDir = $this->vendorDir . '/../' . $composerJson['autoload']['psr-4'][$namespace];
+
+        if (!is_dir($sourceDir)) {
+            mkdir($sourceDir, 0775, true);
+        }
+
+        return $namespace;
     }
 }
