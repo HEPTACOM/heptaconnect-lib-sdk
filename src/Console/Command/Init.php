@@ -55,8 +55,10 @@ class Init extends Command
                 break;
             case self::KEYWORD_PORTAL:
                 $this->getPackageName($io, 'heptaconnect-new-portal', $composerJson);
-                $this->getNamespace($io, $composerJson);
+                $namespace = $this->getNamespace($io, $composerJson);
                 $this->addDependency('heptacom/heptaconnect-portal-base', '@dev', $composerJson);
+
+                $this->makePortal($namespace, $io, $composerJson);
 
                 break;
             case self::KEYWORD_STORAGE:
@@ -137,5 +139,42 @@ class Init extends Command
         }
 
         return $namespace;
+    }
+
+    protected function makePortal(string $namespace, SymfonyStyle $io, array &$composerJson): void
+    {
+        if (!isset($composerJson['autoload']['psr-4'][$namespace])) {
+            $io->warning('A portal could not be created, because your composer.json is missing a PSR-4 compliant autoload definition.');
+
+            return;
+        }
+
+        $sourceDir = $this->vendorDir . '/../' . $composerJson['autoload']['psr-4'][$namespace];
+
+        if (!is_dir($sourceDir) && !mkdir($sourceDir, 0775, true)) {
+            $io->warning(sprintf('A portal could not be created, because the source directory is not writable: %s', $sourceDir));
+
+            return;
+        }
+
+        $fileLocation = $sourceDir . '/Portal.php';
+        $namespace = rtrim($namespace, '\\');
+        $fqn = $namespace . '\\Portal';
+
+        $template = <<<"PHP"
+<?php declare(strict_types=1);
+
+namespace $namespace;
+
+use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalContract;
+
+class Portal extends PortalContract
+{
+}
+
+PHP;
+
+        file_put_contents($fileLocation, $template);
+        $composerJson['extra']['heptaconnect']['portals'][] = $fqn;
     }
 }
