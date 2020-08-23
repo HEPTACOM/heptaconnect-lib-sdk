@@ -109,6 +109,10 @@ class Init extends Command
             return $composerJson['name'];
         }
 
+        if ($rootDir = realpath($this->vendorDir . '/../')) {
+            $nameSuggestion = basename($rootDir);
+        }
+
         $nameSuggestion = get_current_user() . '/' . $nameSuggestion;
 
         return $composerJson['name'] = (string) $io->ask('Please give your package a name.', $nameSuggestion);
