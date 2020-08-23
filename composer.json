@@ -11,6 +11,7 @@
     },
     "require": {
         "php": ">=7.4",
+        "composer/composer": "^1.9",
         "composer/package-versions-deprecated": "^1.8",
         "shopware/core": "6.2.3",
         "shopware/storefront": "6.2.3",

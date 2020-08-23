@@ -2,6 +2,7 @@
 
 namespace Heptacom\HeptaConnect\Sdk\Console\Command;
 
+use Heptacom\HeptaConnect\Sdk\Composer\Composer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +43,8 @@ class Init extends Command
         $composerJsonPath = $workingDir . '/composer.json';
         $composerJson = \file_exists($composerJsonPath) ? \json_decode(\file_get_contents($composerJsonPath), true) : [];
 
+        $composerJson['minimum-stability'] = 'dev';
+
         $packageType = $this->getPackageType($io, $composerJson);
         $this->getPackageName($io, $workingDir, $composerJson);
         $namespace = $this->getNamespace($io, $workingDir, $composerJson);
@@ -67,6 +70,7 @@ class Init extends Command
         }
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT) . PHP_EOL);
+        Composer::update($input, $output, $workingDir);
 
         return 0;
     }
