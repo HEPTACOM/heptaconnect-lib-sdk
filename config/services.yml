@@ -10,7 +10,7 @@ services:
     Heptacom\HeptaConnect\Sdk\:
         resource: '../src/*'
 
-    Heptacom\HeptaConnect\Sdk\Console\Command\Install:
+    Heptacom\HeptaConnect\Sdk\Command\Install:
         arguments:
             - '%env(DATABASE_URL)%'
             - '%kernel.vendor_dir%'
@@ -18,6 +18,10 @@ services:
             - '@monolog.logger'
             - '@Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry'
             - !tagged_iterator shopware.migration_source
+
+    Heptacom\HeptaConnect\Sdk\Command\PackageAdd:
+        arguments:
+            - '%kernel.vendor_dir%'
 
     Shopware\Core\Framework\Store\Services\OpenSSLVerifier:
         arguments:

@@ -1,15 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Heptacom\HeptaConnect\Sdk\Console\Command;
+namespace Heptacom\HeptaConnect\Sdk\Command;
 
 use Heptacom\HeptaConnect\Sdk\Composer\Composer;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class Init extends Command
+class PackageInit extends BaseCommand
 {
     const KEYWORD_DATASET = 'heptaconnect-dataset';
 
@@ -23,12 +21,7 @@ class Init extends Command
         self::KEYWORD_STORAGE,
     ];
 
-    protected static $defaultName = 'sdk:init';
-
-    protected function configure()
-    {
-        $this->addArgument('working-dir', InputArgument::OPTIONAL, 'If specified, use the given directory as working directory.');
-    }
+    protected static $defaultName = 'sdk:package:init';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -69,30 +62,10 @@ class Init extends Command
                 return 1;
         }
 
-        \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT) . PHP_EOL);
+        \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
         Composer::update($input, $output, $workingDir);
 
         return 0;
-    }
-
-    private function getWorkingDir(InputInterface $input): ?string
-    {
-        if (!$input->getArgument('working-dir')) {
-            return \getcwd();
-        }
-
-        $workingDir = \realpath($input->getArgument('working-dir'));
-
-        if ($workingDir) {
-            return $workingDir;
-        }
-
-        if (\mkdir($input->getArgument('working-dir'), 0775, true) &&
-            ($workingDir = \realpath($input->getArgument('working-dir')))) {
-            return $workingDir;
-        }
-
-        return null;
     }
 
     protected function getPackageType(SymfonyStyle $io, array &$composerJson): string
