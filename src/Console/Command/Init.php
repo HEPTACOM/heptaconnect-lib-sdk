@@ -105,7 +105,7 @@ class Init extends Command
 
     protected function getPackageName(SymfonyStyle $io, string $nameSuggestion, array &$composerJson): string
     {
-        if ($composerJson['name'] !== 'heptacom/heptaconnect-skeleton') {
+        if (isset($composerJson['name']) && $composerJson['name'] !== 'heptacom/heptaconnect-skeleton') {
             return $composerJson['name'];
         }
 
