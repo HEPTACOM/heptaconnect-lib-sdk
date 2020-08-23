@@ -63,7 +63,7 @@ class PackageInit extends BaseCommand
         }
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
-        Composer::update($input, $output, $workingDir);
+        Composer::update($output, $workingDir);
 
         return 0;
     }

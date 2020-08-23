@@ -74,7 +74,7 @@ class PackageAdd extends BaseCommand
         }
 
         \file_put_contents($projectComposerJsonPath, \json_encode($projectComposerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
-        Composer::update($input, $output, $projectDir);
+        Composer::update($output, $projectDir);
 
         return 0;
     }
