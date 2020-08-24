@@ -19,7 +19,7 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "heptaconnect-sdk sdk:install"
+            "bin/heptaconnect-sdk sdk:install"
         ]
     }
 }

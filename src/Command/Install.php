@@ -99,12 +99,23 @@ class Install extends Command
         $path = \explode(':', (string) \getenv('PATH'));
 
         foreach (\array_reverse($path) as $directory) {
+            $symlink = $directory . '/heptaconnect-sdk';
+
             try {
-                if (\is_writable($directory) && \symlink($binaryPath, $symlink = $directory . '/heptaconnect-sdk')) {
+                if (\is_writable($directory) && \symlink($binaryPath, $symlink)) {
                     return $symlink;
                 }
             } catch (\Throwable $exception) {
-                if ($exception->getMessage() === 'Warning: symlink(): File exists' && \readlink($symlink) === $binaryPath) {
+                if ($exception->getMessage() === 'Warning: symlink(): File exists') {
+                    if (\readlink($symlink) !== $binaryPath) {
+                        try {
+                            \unlink($symlink);
+                            \symlink($binaryPath, $symlink);
+                        } catch (\Throwable $exception) {
+                            continue;
+                        }
+                    }
+
                     return $symlink;
                 }
             }
