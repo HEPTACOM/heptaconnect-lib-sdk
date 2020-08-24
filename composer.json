@@ -1,6 +1,7 @@
 {
     "name": "heptacom/heptaconnect-sdk",
     "description": "Software Development Kit for HEPTAconnect",
+    "minimum-stability": "dev",
     "bin": [
         "bin/heptaconnect-sdk"
     ],
@@ -16,7 +17,6 @@
         "shopware/storefront": "6.2.3",
         "heptacom/heptaconnect-bridge-shopware-platform": "@dev"
     },
-    "minimum-stability": "dev",
     "scripts": {
         "post-create-project-cmd": [
             "heptaconnect-sdk sdk:install"
