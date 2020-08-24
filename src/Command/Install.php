@@ -62,8 +62,11 @@ class Install extends Command
         $io = new SymfonyStyle($input, $output);
         $force = (bool) $input->getOption('force');
 
-        if (($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false) {
-            $io->error(\sprintf('Unable to find SDK binary (%s)', $this->vendorDir . '/../bin/heptaconnect-sdk'));
+        if (
+            ($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false
+            && ($binaryPath = \realpath($this->vendorDir . '/bin/heptaconnect-sdk')) === false
+        ) {
+            $io->error('Unable to find SDK binary.');
 
             return 1;
         }
