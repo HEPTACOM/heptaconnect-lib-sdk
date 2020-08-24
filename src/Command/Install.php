@@ -62,15 +62,19 @@ class Install extends Command
         $io = new SymfonyStyle($input, $output);
         $force = (bool) $input->getOption('force');
 
+        if (($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false) {
+            $io->error(\sprintf('Unable to find SDK binary (%s)', $this->vendorDir . '/../bin/heptaconnect-sdk'));
+
+            return 1;
+        }
+
+        if (($symlink = self::createSymlink($binaryPath)) === null) {
+            $io->warning('Unable to create symlink to the SDK binary.');
+        }
+
         if (!$input->isInteractive() && !$force) {
-            if (($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false) {
-                $io->error(\sprintf('Unable to find SDK binary (%s)', $this->vendorDir . '/../bin/heptaconnect-sdk'));
-
-                return 1;
-            }
-
             $output->writeln('The installer should run interactively. Please run this command:');
-            $output->writeln(\sprintf('<info>%s sdk:install</info>', $binaryPath));
+            $output->writeln(\sprintf('<info>%s sdk:install</info>', $symlink === null ? $binaryPath : 'heptaconnect-sdk'));
             $io->comment('Aborting');
 
             return 0;
@@ -88,6 +92,25 @@ class Install extends Command
         $this->cache->clear();
 
         return 0;
+    }
+
+    protected static function createSymlink(string $binaryPath): ?string
+    {
+        $path = \explode(':', (string) \getenv('PATH'));
+
+        foreach (\array_reverse($path) as $directory) {
+            try {
+                if (\is_writable($directory) && \symlink($binaryPath, $symlink = $directory . '/heptaconnect-sdk')) {
+                    return $symlink;
+                }
+            } catch (\Throwable $exception) {
+                if ($exception->getMessage() === 'Warning: symlink(): File exists' && \readlink($symlink) === $binaryPath) {
+                    return $symlink;
+                }
+            }
+        }
+
+        return null;
     }
 
     private function getDatabaseName(): string
