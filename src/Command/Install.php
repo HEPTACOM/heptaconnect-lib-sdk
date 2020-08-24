@@ -37,7 +37,7 @@ class Install extends Command
 
     public function __construct(
         string $dsn,
-        string $projectDir,
+        string $vendorDir,
         TagAwareAdapterInterface $cache,
         LoggerInterface $logger,
         EntityIndexerRegistry $entityIndexerRegistry,
@@ -45,7 +45,7 @@ class Install extends Command
     ) {
         parent::__construct(null);
         $this->dsn = $dsn;
-        $this->vendorDir = $projectDir;
+        $this->vendorDir = $vendorDir;
         $this->cache = $cache;
         $this->logger = $logger;
         $this->entityIndexerRegistry = $entityIndexerRegistry;

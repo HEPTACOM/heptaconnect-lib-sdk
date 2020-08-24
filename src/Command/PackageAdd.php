@@ -46,7 +46,7 @@ class PackageAdd extends BaseCommand
         $projectDir = \realpath($this->vendorDir . '/..');
 
         if (!$projectDir || !file_exists($projectComposerJsonPath = $projectDir . '/composer.json')) {
-            $io->error(\sprintf('Failed to locate composer.json file in %s.', $projectDir));
+            $io->error(\sprintf('Failed to locate composer.json file in %s.', $this->vendorDir . '/..'));
 
             return 1;
         }
