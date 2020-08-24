@@ -106,17 +106,17 @@ class Install extends Command
                     return $symlink;
                 }
             } catch (\Throwable $exception) {
-                if ($exception->getMessage() === 'Warning: symlink(): File exists') {
-                    if (\readlink($symlink) !== $binaryPath) {
+                switch ($exception->getMessage()) {
+                    case 'Warning: symlink(): File exists':
+                    case 'Warning: symlink(): No such file or directory':
                         try {
                             \unlink($symlink);
                             \symlink($binaryPath, $symlink);
-                        } catch (\Throwable $exception) {
-                            continue;
-                        }
-                    }
 
-                    return $symlink;
+                            return $symlink;
+                        } catch (\Throwable $exception) {
+                            continue 2;
+                        }
                 }
             }
         }
