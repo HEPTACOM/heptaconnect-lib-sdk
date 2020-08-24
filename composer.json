@@ -16,5 +16,10 @@
         "shopware/storefront": "6.2.3",
         "heptacom/heptaconnect-bridge-shopware-platform": "@dev"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "scripts": {
+        "post-create-project-cmd": [
+            "heptaconnect-sdk sdk:install"
+        ]
+    }
 }
