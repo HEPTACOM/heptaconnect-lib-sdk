@@ -85,7 +85,7 @@ class PackageInit extends BaseCommand
 
     private function askForPackageType(SymfonyStyle $io): string
     {
-        return (string) $io->choice('Please choose the type of package you want to build:', self::VALID_KEYWORDS);
+        return (string) $io->choice('Choose the type of package you want to build', self::VALID_KEYWORDS);
     }
 
     protected function addDependency(string $packageName, string $version, array &$composerJson): void
@@ -101,7 +101,7 @@ class PackageInit extends BaseCommand
 
         $nameSuggestion = \get_current_user() . '/' . \basename($workingDir);
 
-        return $composerJson['name'] = (string) $io->ask('Please give your package a name.', $nameSuggestion);
+        return $composerJson['name'] = (string) $io->ask('Give your package a name.', $nameSuggestion);
     }
 
     protected function getNamespace(SymfonyStyle $io, string $workingDir, array &$composerJson): string
@@ -117,7 +117,7 @@ class PackageInit extends BaseCommand
             return \str_replace(' ', '', $name);
         }, \explode('/', $composerJson['name'])));
 
-        $namespace = (string) $io->ask('Please specify a PSR-4 compliant namespace.', $suggestion);
+        $namespace = (string) $io->ask('Specify a PSR-4 compliant namespace.', $suggestion);
         $namespace = \trim($namespace, '\\') . '\\';
 
         $composerJson['autoload']['psr-4'][$namespace] = 'src/';
