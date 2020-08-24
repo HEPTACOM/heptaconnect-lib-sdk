@@ -24,10 +24,10 @@ set_time_limit(0);
 umask(0000);
 
 if (!class_exists(ClassLoader::class, false) || !isset($classLoader) || !($classLoader instanceof ClassLoader)) {
-    if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-        $classLoader = require_once __DIR__ . '/../vendor/autoload.php';
-    } elseif (file_exists(__DIR__ . '/../../../autoload.php')) {
+    if (file_exists(__DIR__ . '/../../../autoload.php')) {
         $classLoader = require_once __DIR__ . '/../../../autoload.php';
+    } elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+        $classLoader = require_once __DIR__ . '/../vendor/autoload.php';
     } else {
         echo "You must run \033[32mcomposer install\033[39m before you can use the SDK." . PHP_EOL;
         exit();
