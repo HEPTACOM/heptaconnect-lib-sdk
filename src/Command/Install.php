@@ -61,6 +61,21 @@ class Install extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $force = (bool) $input->getOption('force');
+
+        if (!$input->isInteractive() && !$force) {
+            if (($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false) {
+                $io->error(\sprintf('Unable to find SDK binary (%s)', $this->vendorDir . '/../bin/heptaconnect-sdk'));
+
+                return 1;
+            }
+
+            $output->writeln('The installer should run interactively. Please run this command:');
+            $output->writeln(\sprintf('<info>%s sdk:install</info>', $binaryPath));
+            $io->comment('Aborting');
+
+            return 0;
+        }
+
         $connection = $this->getDatabaseLessConnection();
 
         $this->setupDatabase($io, $force, $connection);
