@@ -19,6 +19,10 @@ services:
             - '@Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry'
             - !tagged_iterator shopware.migration_source
 
+    Heptacom\HeptaConnect\Sdk\Command\SelfUpdate:
+        arguments:
+            - '%kernel.vendor_dir%'
+
     Heptacom\HeptaConnect\Sdk\Command\PackageAdd:
         arguments:
             - '%kernel.vendor_dir%'
