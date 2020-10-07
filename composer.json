@@ -1,9 +1,9 @@
 {
     "name": "heptacom/heptaconnect-lib-sdk",
+    "version": "0.0.1",
     "description": "Library for the Software Development Kit for HEPTAconnect",
     "license": "MIT",
     "type": "library",
-    "minimum-stability": "dev",
     "bin": [
         "bin/heptaconnect-sdk"
     ],
@@ -17,6 +17,6 @@
         "composer/package-versions-deprecated": "^1.8",
         "shopware/core": "6.2.3",
         "shopware/storefront": "6.2.3",
-        "heptacom/heptaconnect-bridge-shopware-platform": "@dev"
+        "heptacom/heptaconnect-bridge-shopware-platform": ">=0.0.1"
     }
 }
