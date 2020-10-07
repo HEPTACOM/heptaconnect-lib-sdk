@@ -3,6 +3,7 @@
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
 use Heptacom\HeptaConnect\Sdk\Composer\Composer;
+use Heptacom\HeptaConnect\Sdk\Composer\Git;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -36,24 +37,25 @@ class PackageInit extends BaseCommand
         $composerJsonPath = $workingDir . '/composer.json';
         $composerJson = \file_exists($composerJsonPath) ? \json_decode(\file_get_contents($composerJsonPath), true) : [];
 
-        $composerJson['minimum-stability'] = 'dev';
-
+        $composerJson['version'] = '0.0.1';
         $packageType = $this->getPackageType($io, $composerJson);
         $this->getPackageName($io, $workingDir, $composerJson);
         $namespace = $this->getNamespace($io, $workingDir, $composerJson);
 
+        $this->addDependency('php', '^7.4', $composerJson);
+
         switch ($packageType) {
             case self::KEYWORD_DATASET:
-                $this->addDependency('heptacom/heptaconnect-dataset-base', '@dev', $composerJson);
+                $this->addDependency('heptacom/heptaconnect-dataset-base', '>=0.0.1', $composerJson);
 
                 break;
             case self::KEYWORD_PORTAL:
-                $this->addDependency('heptacom/heptaconnect-portal-base', '@dev', $composerJson);
+                $this->addDependency('heptacom/heptaconnect-portal-base', '>=0.0.1', $composerJson);
                 $this->makePortal($io, $workingDir, $namespace, $composerJson);
 
                 break;
             case self::KEYWORD_STORAGE:
-                $this->addDependency('heptacom/heptaconnect-storage-base', '@dev', $composerJson);
+                $this->addDependency('heptacom/heptaconnect-storage-base', '>=0.0.1', $composerJson);
 
                 break;
             default:
@@ -64,6 +66,12 @@ class PackageInit extends BaseCommand
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
         Composer::update($output, $workingDir);
+
+        \file_put_contents($workingDir . '/.gitignore', \implode(PHP_EOL, [
+            '/vendor/',
+            'composer.lock',
+        ]) . PHP_EOL);
+        Git::init($output, $workingDir);
 
         return 0;
     }

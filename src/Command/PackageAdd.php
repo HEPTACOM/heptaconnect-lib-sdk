@@ -54,8 +54,7 @@ class PackageAdd extends BaseCommand
         $projectComposerJson = \json_decode(\file_get_contents($projectComposerJsonPath), true);
 
         $packageName = $packageComposerJson['name'];
-        $projectComposerJson['minimum-stability'] = 'dev';
-        $projectComposerJson['require'][$packageName] = '@dev';
+        $projectComposerJson['require'][$packageName] = '>=0.0.1';
 
         $shouldAddRepository = true;
         if (isset($projectComposerJson['repositories'])) {
