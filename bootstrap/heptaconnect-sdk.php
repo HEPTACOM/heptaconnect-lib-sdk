@@ -45,6 +45,7 @@ if (!isset($_SERVER['PROJECT_ROOT'])) {
 }
 
 $input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev', true);
 Debug::enable();
 $pluginLoader = new StaticKernelPluginLoader($classLoader, null);
 
@@ -57,7 +58,7 @@ if (!isset($_SERVER['INSTALL']) && (trim($_SERVER['DATABASE_URL'] ?? '') !== '')
 }
 
 $application = new class(new Kernel(
-    'dev',
+    $env,
     true,
     $pluginLoader,
     'heptaconnect',
