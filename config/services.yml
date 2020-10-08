@@ -32,3 +32,7 @@ services:
             -
                 - '%kernel.vendor_dir%/shopware/platform/src/Core/Framework/Store/public.key'
                 - '%kernel.vendor_dir%/shopware/core/Framework/Store/public.key'
+
+    Heptacom\HeptaConnect\Core\Component\Composer\PackageConfigurationLoader:
+        arguments:
+            - '%kernel.vendor_dir%/../composer.json'
