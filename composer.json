@@ -14,9 +14,12 @@
     },
     "require": {
         "php": ">=7.4",
+        "bheller/images-generator": "~1.0.1",
         "composer/package-versions-deprecated": "^1.8",
+        "fzaninotto/faker": "~1.8.0",
+        "heptacom/heptaconnect-bridge-shopware-platform": ">=0.0.1",
+        "mbezhanov/faker-provider-collection": "~1.2.1",
         "shopware/core": "6.2.3",
-        "shopware/storefront": "6.2.3",
-        "heptacom/heptaconnect-bridge-shopware-platform": ">=0.0.1"
+        "shopware/storefront": "6.2.3"
     }
 }
