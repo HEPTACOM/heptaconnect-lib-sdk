@@ -46,3 +46,8 @@ services:
             - '@Shopware\Core\Framework\Plugin\Changelog\ChangelogService'
             - '@Shopware\Core\Framework\Plugin\Util\PluginFinder'
             - '@Shopware\Core\Framework\Plugin\Util\VersionSanitizer'
+
+    Shopware\Core\Framework\Plugin\Requirement\RequirementsValidator:
+        arguments:
+            - '@plugin.repository'
+            - '%kernel.vendor_dir%/../'
