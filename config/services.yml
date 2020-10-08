@@ -36,3 +36,13 @@ services:
     Heptacom\HeptaConnect\Core\Component\Composer\PackageConfigurationLoader:
         arguments:
             - '%kernel.vendor_dir%/../composer.json'
+
+    Shopware\Core\Framework\Plugin\PluginService:
+        arguments:
+            - '%kernel.plugin_dir%'
+            - '%kernel.vendor_dir%/../'
+            - '@plugin.repository'
+            - '@language.repository'
+            - '@Shopware\Core\Framework\Plugin\Changelog\ChangelogService'
+            - '@Shopware\Core\Framework\Plugin\Util\PluginFinder'
+            - '@Shopware\Core\Framework\Plugin\Util\VersionSanitizer'
