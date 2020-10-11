@@ -15,7 +15,14 @@ if (PHP_VERSION_ID < 70200) {
 }
 
 if (!class_exists(ClassLoader::class, false) || !isset($classLoader) || !($classLoader instanceof ClassLoader)) {
-    $classLoader = require_once __DIR__ . '/../vendor/autoload.php';
+    if (file_exists(__DIR__ . '/../../../autoload.php')) {
+        $classLoader = require_once __DIR__ . '/../../../autoload.php';
+    } elseif (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+        $classLoader = require_once __DIR__ . '/../vendor/autoload.php';
+    } else {
+        echo "You must run \033[32mcomposer install\033[39m before you can use the SDK." . PHP_EOL;
+        exit();
+    }
 }
 
 // The check is to ensure we don't use .env if APP_ENV is defined

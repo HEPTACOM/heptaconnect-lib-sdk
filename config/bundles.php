@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-return [
+$bundles = [
     // stock shopware
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
@@ -19,3 +19,9 @@ return [
     // heptaconnect
     Heptacom\HeptaConnect\Bridge\ShopwarePlatform\Bundle::class => ['all' => true],
 ];
+
+if (class_exists(Shopware\Administration\Administration::class)) {
+    $bundles[Shopware\Administration\Administration::class] = ['all' => true];
+}
+
+return $bundles;

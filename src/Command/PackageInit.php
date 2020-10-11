@@ -2,8 +2,8 @@
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
-use Heptacom\HeptaConnect\Sdk\Composer\Composer;
-use Heptacom\HeptaConnect\Sdk\Composer\Git;
+use Heptacom\HeptaConnect\Sdk\Service\Composer;
+use Heptacom\HeptaConnect\Sdk\Service\Git;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
