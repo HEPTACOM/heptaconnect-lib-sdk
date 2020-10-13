@@ -45,7 +45,7 @@ if (!isset($_SERVER['PROJECT_ROOT'])) {
 }
 
 $input = new ArgvInput();
-$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev', true);
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'prod', true);
 Debug::enable();
 $pluginLoader = new StaticKernelPluginLoader($classLoader, null);
 
