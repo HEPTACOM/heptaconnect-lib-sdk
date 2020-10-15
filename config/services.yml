@@ -36,6 +36,7 @@ services:
     Heptacom\HeptaConnect\Core\Component\Composer\PackageConfigurationLoader:
         arguments:
             - '%kernel.vendor_dir%/../composer.json'
+            - '@cache.adapter.system'
 
     Shopware\Core\Framework\Plugin\PluginService:
         arguments:
