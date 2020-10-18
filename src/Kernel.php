@@ -8,6 +8,16 @@ use Composer\Autoload\ClassLoader;
 
 class Kernel extends \Shopware\Core\Kernel
 {
+    public function boot(): void
+    {
+        if ($this->booted === false) {
+            chmod(__DIR__ . '/../config/jwt/private.pem', 0660);
+            chmod(__DIR__ . '/../config/jwt/public.pem', 0660);
+        }
+
+        parent::boot();
+    }
+
     protected function initializeDatabaseConnectionVariables(): void
     {
         if ($_SERVER['INSTALL'] ?? false) {
