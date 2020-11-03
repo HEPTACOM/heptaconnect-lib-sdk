@@ -21,6 +21,7 @@
         "heptacom/heptaconnect-bridge-shopware-platform": ">=0.0.1",
         "kubawerlos/php-cs-fixer-custom-fixers": "^2.3",
         "mbezhanov/faker-provider-collection": "~1.2.1",
+        "psy/psysh": "@stable",
         "shopware/core": "6.2.3",
         "shopware/storefront": "6.2.3",
         "shopware/administration": "6.2.3"

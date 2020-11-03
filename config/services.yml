@@ -27,6 +27,13 @@ services:
         arguments:
             - '%kernel.vendor_dir%'
 
+    Heptacom\HeptaConnect\Sdk\Command\Tinker:
+        arguments:
+            - '@Heptacom\HeptaConnect\Storage\ShopwareDal\Repository\PortalNodeRepository'
+            - '@Heptacom\HeptaConnect\Storage\ShopwareDal\StorageKeyGenerator'
+            - '@Heptacom\HeptaConnect\Core\Portal\PortalRegistry'
+            - '@Heptacom\HeptaConnect\Core\StatusReporting\StatusReportingContextFactory'
+
     Shopware\Core\Framework\Store\Services\OpenSSLVerifier:
         arguments:
             -
