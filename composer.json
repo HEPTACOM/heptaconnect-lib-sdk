@@ -1,11 +1,24 @@
 {
     "name": "heptacom/heptaconnect-lib-sdk",
     "version": "0.0.1",
-    "description": "Library for the Software Development Kit for HEPTAconnect",
-    "license": "MIT",
     "type": "library",
+    "keywords": [
+        "heptaconnect",
+        "development",
+        "sdk"
+    ],
+    "description": "Library for the Software Development Kit for HEPTAconnect",
+    "license": [
+        "AGPL-3.0-or-later",
+        "proprietary"
+    ],
     "bin": [
         "bin/heptaconnect-sdk"
+    ],
+    "authors": [
+        {
+            "name": "HEPTACOM GmbH"
+        }
     ],
     "autoload": {
         "psr-4": {
@@ -25,5 +38,28 @@
         "shopware/core": "6.2.3",
         "shopware/storefront": "6.2.3",
         "shopware/administration": "6.2.3"
-    }
+    },
+    "conflict": {
+        "nikic/php-parser": "4.7.0"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": ">=2.7",
+        "icanhazstring/composer-unused": ">=0.7",
+        "infection/infection": ">=0.15",
+        "maglnet/composer-require-checker": ">=2",
+        "phpstan/extension-installer": ">=1",
+        "phpstan/phpstan": ">=0.12",
+        "phpstan/phpstan-deprecation-rules": ">=0.12",
+        "phpstan/phpstan-phpunit": ">=0.12",
+        "phpstan/phpstan-strict-rules": ">=0.12",
+        "phpunit/phpunit": ">=9.3 <10",
+        "psalm/plugin-phpunit": ">=0.10",
+        "vimeo/psalm": ">=3"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Heptacom\\HeptaConnect\\Test\\": "test/"
+        }
+    },
+    "minimum-stability": "stable"
 }

@@ -2,4 +2,6 @@
 /var/
 /files/
 
-composer.lock
+/composer.lock
+
+/.build
