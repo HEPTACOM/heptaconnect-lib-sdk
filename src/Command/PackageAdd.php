@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
@@ -29,7 +30,7 @@ class PackageAdd extends BaseCommand
             return 1;
         }
 
-        if (!file_exists($packageComposerJsonPath = $workingDir . '/composer.json')) {
+        if (!\file_exists($packageComposerJsonPath = $workingDir.'/composer.json')) {
             $io->error(\sprintf('Failed to locate composer.json file in %s.', $workingDir));
 
             return 1;
@@ -38,15 +39,15 @@ class PackageAdd extends BaseCommand
         $packageComposerJson = \json_decode(\file_get_contents($packageComposerJsonPath), true);
 
         if (!isset($packageComposerJson['name'])) {
-            $io->error(sprintf('Your composer.json file (%s) is missing a name attribute.', $packageComposerJsonPath));
+            $io->error(\sprintf('Your composer.json file (%s) is missing a name attribute.', $packageComposerJsonPath));
 
             return 1;
         }
 
-        $projectDir = \realpath($this->vendorDir . '/..');
+        $projectDir = \realpath($this->vendorDir.'/..');
 
-        if (!$projectDir || !file_exists($projectComposerJsonPath = $projectDir . '/composer.json')) {
-            $io->error(\sprintf('Failed to locate composer.json file in %s.', $this->vendorDir . '/..'));
+        if (!$projectDir || !\file_exists($projectComposerJsonPath = $projectDir.'/composer.json')) {
+            $io->error(\sprintf('Failed to locate composer.json file in %s.', $this->vendorDir.'/..'));
 
             return 1;
         }
@@ -72,7 +73,7 @@ class PackageAdd extends BaseCommand
             ];
         }
 
-        \file_put_contents($projectComposerJsonPath, \json_encode($projectComposerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+        \file_put_contents($projectComposerJsonPath, \json_encode($projectComposerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
         Composer::update($output, $projectDir);
 
         return 0;

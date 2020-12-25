@@ -1,30 +1,22 @@
 {
     "name": "heptacom/heptaconnect-lib-sdk",
-    "version": "0.0.1",
     "type": "library",
+    "description": "Library for the Software Development Kit for HEPTAconnect",
     "keywords": [
         "heptaconnect",
         "development",
         "sdk"
     ],
-    "description": "Library for the Software Development Kit for HEPTAconnect",
+    "version": "0.0.1",
     "license": [
         "AGPL-3.0-or-later",
         "proprietary"
-    ],
-    "bin": [
-        "bin/heptaconnect-sdk"
     ],
     "authors": [
         {
             "name": "HEPTACOM GmbH"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Heptacom\\HeptaConnect\\Sdk\\": "src/"
-        }
-    },
     "require": {
         "php": ">=7.4",
         "bheller/images-generator": "~1.0.1",
@@ -35,9 +27,9 @@
         "kubawerlos/php-cs-fixer-custom-fixers": "^2.3",
         "mbezhanov/faker-provider-collection": "~1.2.1",
         "psy/psysh": "@stable",
+        "shopware/administration": "6.2.3",
         "shopware/core": "6.2.3",
-        "shopware/storefront": "6.2.3",
-        "shopware/administration": "6.2.3"
+        "shopware/storefront": "6.2.3"
     },
     "conflict": {
         "nikic/php-parser": "4.7.0"
@@ -58,10 +50,18 @@
         "psalm/plugin-phpunit": ">=0.10",
         "vimeo/psalm": ">=4"
     },
+    "autoload": {
+        "psr-4": {
+            "Heptacom\\HeptaConnect\\Sdk\\": "src/"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
             "Heptacom\\HeptaConnect\\Test\\": "test/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "bin": [
+        "bin/heptaconnect-sdk"
+    ]
 }

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
@@ -34,7 +35,7 @@ class PackageInit extends BaseCommand
             return 1;
         }
 
-        $composerJsonPath = $workingDir . '/composer.json';
+        $composerJsonPath = $workingDir.'/composer.json';
         $composerJson = \file_exists($composerJsonPath) ? \json_decode(\file_get_contents($composerJsonPath), true) : [];
 
         $composerJson['version'] = '0.0.1';
@@ -64,13 +65,13 @@ class PackageInit extends BaseCommand
                 return 1;
         }
 
-        \file_put_contents($composerJsonPath, \json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+        \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
         Composer::update($output, $workingDir);
 
-        \file_put_contents($workingDir . '/.gitignore', \implode(PHP_EOL, [
+        \file_put_contents($workingDir.'/.gitignore', \implode(\PHP_EOL, [
             '/vendor/',
             'composer.lock',
-        ]) . PHP_EOL);
+        ]).\PHP_EOL);
         Git::init($output, $workingDir);
 
         return 0;
@@ -91,11 +92,6 @@ class PackageInit extends BaseCommand
         return $composerJson['keywords'][] = $this->askForPackageType($io);
     }
 
-    private function askForPackageType(SymfonyStyle $io): string
-    {
-        return (string) $io->choice('Choose the type of package you want to build', self::VALID_KEYWORDS);
-    }
-
     protected function addDependency(string $packageName, string $version, array &$composerJson): void
     {
         $composerJson['require'][$packageName] = $version;
@@ -107,7 +103,7 @@ class PackageInit extends BaseCommand
             return $composerJson['name'];
         }
 
-        $nameSuggestion = \get_current_user() . '/' . \basename($workingDir);
+        $nameSuggestion = \get_current_user().'/'.\basename($workingDir);
 
         return $composerJson['name'] = (string) $io->ask('Give your package a name.', $nameSuggestion);
     }
@@ -126,11 +122,11 @@ class PackageInit extends BaseCommand
         }, \explode('/', $composerJson['name'])));
 
         $namespace = (string) $io->ask('Specify a PSR-4 compliant namespace.', $suggestion);
-        $namespace = \trim($namespace, '\\') . '\\';
+        $namespace = \trim($namespace, '\\').'\\';
 
         $composerJson['autoload']['psr-4'][$namespace] = 'src/';
 
-        $sourceDir = $workingDir . '/' . $composerJson['autoload']['psr-4'][$namespace];
+        $sourceDir = $workingDir.'/'.$composerJson['autoload']['psr-4'][$namespace];
 
         if (!\is_dir($sourceDir)) {
             \mkdir($sourceDir, 0775, true);
@@ -147,7 +143,7 @@ class PackageInit extends BaseCommand
             return;
         }
 
-        $sourceDir = $workingDir . '/' . $composerJson['autoload']['psr-4'][$namespace];
+        $sourceDir = $workingDir.'/'.$composerJson['autoload']['psr-4'][$namespace];
 
         if (!\is_dir($sourceDir) && !\mkdir($sourceDir, 0775, true)) {
             $io->warning(\sprintf('A portal could not be created, because the source directory is not writable: %s', $sourceDir));
@@ -155,9 +151,9 @@ class PackageInit extends BaseCommand
             return;
         }
 
-        $fileLocation = $sourceDir . '/Portal.php';
+        $fileLocation = $sourceDir.'/Portal.php';
         $namespace = \rtrim($namespace, '\\');
-        $fqn = $namespace . '\\Portal';
+        $fqn = $namespace.'\\Portal';
 
         $template = <<<"PHP"
 <?php declare(strict_types=1);
@@ -174,5 +170,10 @@ PHP;
 
         \file_put_contents($fileLocation, $template);
         $composerJson['extra']['heptaconnect']['portals'][] = $fqn;
+    }
+
+    private function askForPackageType(SymfonyStyle $io): string
+    {
+        return (string) $io->choice('Choose the type of package you want to build', self::VALID_KEYWORDS);
     }
 }

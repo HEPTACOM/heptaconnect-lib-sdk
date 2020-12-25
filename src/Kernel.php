@@ -11,8 +11,8 @@ class Kernel extends \Shopware\Core\Kernel
     public function boot(): void
     {
         if ($this->booted === false) {
-            chmod(__DIR__ . '/../config/jwt/private.pem', 0660);
-            chmod(__DIR__ . '/../config/jwt/public.pem', 0660);
+            \chmod(__DIR__.'/../config/jwt/private.pem', 0660);
+            \chmod(__DIR__.'/../config/jwt/public.pem', 0660);
         }
 
         parent::boot();
@@ -30,7 +30,7 @@ class Kernel extends \Shopware\Core\Kernel
     protected function getKernelParameters(): array
     {
         $kernelParameters = parent::getKernelParameters();
-        $kernelParameters['kernel.vendor_dir'] = dirname((new \ReflectionClass(ClassLoader::class))->getFileName(), 2);
+        $kernelParameters['kernel.vendor_dir'] = \dirname((new \ReflectionClass(ClassLoader::class))->getFileName(), 2);
 
         return $kernelParameters;
     }

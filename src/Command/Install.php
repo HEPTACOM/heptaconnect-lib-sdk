@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
@@ -63,8 +64,8 @@ class Install extends Command
         $force = (bool) $input->getOption('force');
 
         if (
-            ($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false
-            && ($binaryPath = \realpath($this->vendorDir . '/bin/heptaconnect-sdk')) === false
+            ($binaryPath = \realpath($this->vendorDir.'/../bin/heptaconnect-sdk')) === false
+            && ($binaryPath = \realpath($this->vendorDir.'/bin/heptaconnect-sdk')) === false
         ) {
             $io->error('Unable to find SDK binary.');
 
@@ -102,7 +103,7 @@ class Install extends Command
         $path = \explode(':', (string) \getenv('PATH'));
 
         foreach (\array_reverse($path) as $directory) {
-            $symlink = $directory . '/heptaconnect-sdk';
+            $symlink = $directory.'/heptaconnect-sdk';
 
             try {
                 if (\is_writable($directory) && \symlink($binaryPath, $symlink)) {
@@ -129,7 +130,7 @@ class Install extends Command
 
     private function getDatabaseName(): string
     {
-        return substr(parse_url($this->dsn)['path'], 1);
+        return \substr(\parse_url($this->dsn)['path'], 1);
     }
 
     /**
@@ -137,13 +138,13 @@ class Install extends Command
      */
     private function getDatabaseLessConnection(): Connection
     {
-        $params = parse_url($this->dsn);
+        $params = \parse_url($this->dsn);
 
         return DriverManager::getConnection([
-            'url' => sprintf(
+            'url' => \sprintf(
                 '%s://%s%s:%s',
                 $params['scheme'],
-                isset($params['pass'], $params['user']) ? ($params['user'] . ':' . $params['pass'] . '@') : '',
+                isset($params['pass'], $params['user']) ? ($params['user'].':'.$params['pass'].'@') : '',
                 $params['host'],
                 $params['port'] ?? 3306
             ),
@@ -156,18 +157,18 @@ class Install extends Command
         $dbName = $this->getDatabaseName();
         $io->section('Setup database');
 
-        if ($io->confirm(sprintf('Is it ok to create %s?', $dbName), $force)) {
-            $connection->executeUpdate('CREATE DATABASE IF NOT EXISTS `' . $dbName . '` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`');
-            $io->success('Created database `' . $dbName . '`');
+        if ($io->confirm(\sprintf('Is it ok to create %s?', $dbName), $force)) {
+            $connection->executeUpdate('CREATE DATABASE IF NOT EXISTS `'.$dbName.'` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`');
+            $io->success('Created database `'.$dbName.'`');
         }
 
-        $connection->exec('USE `' . $dbName . '`');
+        $connection->exec('USE `'.$dbName.'`');
 
         $tables = $connection->query('SHOW TABLES')->fetchAll(FetchMode::COLUMN);
 
-        if (!in_array('migration', $tables, true)) {
+        if (!\in_array('migration', $tables, true)) {
             $io->writeln('Importing base schema.sql');
-            $connection->exec(file_get_contents($this->vendorDir . '/shopware/core/schema.sql'));
+            $connection->exec(\file_get_contents($this->vendorDir.'/shopware/core/schema.sql'));
             $io->success('Importing base schema.sql');
         }
     }
