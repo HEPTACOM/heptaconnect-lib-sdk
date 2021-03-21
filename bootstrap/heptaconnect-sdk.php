@@ -10,11 +10,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 
-if (PHP_VERSION_ID < 70200) {
-    echo 'Your cli is running PHP version ' . PHP_VERSION . ' but Shopware 6 requires at least PHP 7.2.0' . PHP_EOL;
-    exit();
-}
-
 if (PHP_VERSION_ID < 70400) {
     echo 'Your cli is running PHP version ' . PHP_VERSION . ' but HEPTAconnect requires at least PHP 7.4.0' . PHP_EOL;
     exit();
