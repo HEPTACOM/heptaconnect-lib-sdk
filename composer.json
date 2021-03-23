@@ -60,7 +60,6 @@
             "Heptacom\\HeptaConnect\\Test\\": "test/"
         }
     },
-    "minimum-stability": "stable",
     "bin": [
         "bin/heptaconnect-sdk"
     ]
