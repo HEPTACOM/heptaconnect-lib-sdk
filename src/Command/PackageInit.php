@@ -25,6 +25,14 @@ class PackageInit extends BaseCommand
 
     protected static $defaultName = 'sdk:package:init';
 
+    private string $vendorDir;
+
+    public function __construct(string $vendorDir)
+    {
+        parent::__construct();
+        $this->vendorDir = $vendorDir;
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -63,6 +71,18 @@ class PackageInit extends BaseCommand
                 $io->error(\sprintf('Your package type is not supported by the SDK. (%s)', $packageType));
 
                 return 1;
+        }
+
+        $projectDir = \realpath($this->vendorDir.'/..');
+
+        if ($projectDir && \is_dir($localRepository = $projectDir.'/repos')) {
+            $composerJson['repositories']['heptaconnect-sources'] = [
+                'type' => 'path',
+                'url' => $localRepository.'/**',
+                'options' => [
+                    'symlink' => false,
+                ],
+            ];
         }
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
