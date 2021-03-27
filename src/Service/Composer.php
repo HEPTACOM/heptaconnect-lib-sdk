@@ -12,6 +12,19 @@ class Composer
         $this->file = $file;
     }
 
+    public function setVersion(string $version): void
+    {
+        $projectComposerJson = $this->read();
+        $projectComposerJson['version'] = $version;
+
+        $this->write($projectComposerJson);
+    }
+
+    public function getVersion(): ?string
+    {
+        return $this->read()['version'] ?? null;
+    }
+
     public function requirePackage(string $package, string $constraint): void
     {
         $projectComposerJson = $this->read();
