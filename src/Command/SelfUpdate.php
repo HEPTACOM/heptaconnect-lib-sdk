@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
-use Heptacom\HeptaConnect\Sdk\Service\Composer;
+use Heptacom\HeptaConnect\Sdk\Service\ComposerCommandline;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,7 +31,7 @@ class SelfUpdate extends Command
             return 1;
         }
 
-        Composer::update($output, $projectDir);
+        ComposerCommandline::update($output, $projectDir);
 
         return 0;
     }

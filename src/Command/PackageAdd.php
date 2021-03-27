@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
-use Heptacom\HeptaConnect\Sdk\Service\Composer;
+use Heptacom\HeptaConnect\Sdk\Service\ComposerCommandline;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -74,7 +74,7 @@ class PackageAdd extends BaseCommand
         }
 
         \file_put_contents($projectComposerJsonPath, \json_encode($projectComposerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
-        Composer::update($output, $projectDir);
+        ComposerCommandline::update($output, $projectDir);
 
         return 0;
     }

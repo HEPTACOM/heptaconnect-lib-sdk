@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
-use Heptacom\HeptaConnect\Sdk\Service\Composer;
+use Heptacom\HeptaConnect\Sdk\Service\ComposerCommandline;
 use Heptacom\HeptaConnect\Sdk\Service\Git;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,7 +86,7 @@ class PackageInit extends BaseCommand
         }
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
-        Composer::update($output, $workingDir);
+        ComposerCommandline::update($output, $workingDir);
 
         \file_put_contents($workingDir.'/.gitignore', \implode(\PHP_EOL, [
             '/vendor/',

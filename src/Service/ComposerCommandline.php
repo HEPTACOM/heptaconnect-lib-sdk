@@ -6,7 +6,7 @@ namespace Heptacom\HeptaConnect\Sdk\Service;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class Composer
+class ComposerCommandline
 {
     public static function update(OutputInterface $output, string $workingDir): void
     {
