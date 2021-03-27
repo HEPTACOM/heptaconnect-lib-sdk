@@ -2,7 +2,10 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../composerRequiringPackage"
+            "url": "../composerRequiringPackage",
+            "options": {
+                "symlink": true
+            }
         }
     ]
 }

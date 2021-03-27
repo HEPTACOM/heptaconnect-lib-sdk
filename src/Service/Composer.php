@@ -20,7 +20,7 @@ class Composer
         $this->write($projectComposerJson);
     }
 
-    public function addPathRepository(string $directory): void
+    public function addPathRepository(string $directory, bool $symlink = true): void
     {
         $projectComposerJson = $this->read();
         $shouldAddRepository = true;
@@ -52,6 +52,9 @@ class Composer
             $projectComposerJson['repositories'][] = [
                 'type' => 'path',
                 'url' => $directory,
+                'options' => [
+                    'symlink' => $symlink,
+                ]
             ];
         }
 
