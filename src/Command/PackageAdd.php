@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
+use Heptacom\HeptaConnect\Sdk\Service\Composer;
 use Heptacom\HeptaConnect\Sdk\Service\ComposerCommandline;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -52,28 +53,10 @@ class PackageAdd extends BaseCommand
             return 1;
         }
 
-        $projectComposerJson = \json_decode(\file_get_contents($projectComposerJsonPath), true);
+        $composer = new Composer($projectComposerJsonPath);
+        $composer->addPathRepository($packageComposerJson['name']);
+        $composer->requirePackage($packageComposerJson['name'], '>=0.0.1');
 
-        $packageName = $packageComposerJson['name'];
-        $projectComposerJson['require'][$packageName] = '>=0.0.1';
-
-        $shouldAddRepository = true;
-        if (isset($projectComposerJson['repositories'])) {
-            foreach ($projectComposerJson['repositories'] as $repository) {
-                if (isset($repository['type']) && $repository['type'] === 'path' && isset($repository['url']) && $repository['url'] === $workingDir) {
-                    $shouldAddRepository = false;
-                }
-            }
-        }
-
-        if ($shouldAddRepository) {
-            $projectComposerJson['repositories'][] = [
-                'type' => 'path',
-                'url' => $workingDir,
-            ];
-        }
-
-        \file_put_contents($projectComposerJsonPath, \json_encode($projectComposerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
         ComposerCommandline::update($output, $projectDir);
 
         return 0;
