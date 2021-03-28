@@ -25,6 +25,19 @@ class Composer
         return $this->read()['version'] ?? null;
     }
 
+    public function setName(string $name): void
+    {
+        $projectComposerJson = $this->read();
+        $projectComposerJson['name'] = $name;
+
+        $this->write($projectComposerJson);
+    }
+
+    public function getName(): ?string
+    {
+        return $this->read()['name'] ?? null;
+    }
+
     public function requirePackage(string $package, string $constraint): void
     {
         $projectComposerJson = $this->read();

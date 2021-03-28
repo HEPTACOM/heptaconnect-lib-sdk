@@ -47,4 +47,17 @@ class ComposerTest extends TestCase
         );
         self::assertSame('0.0.1', $composer->getVersion());
     }
+
+    public function testSetName(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetName/composer_init.json', __DIR__.'/fixture/composerSetName/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetName/composer.json');
+        $composer->setName('foo/bar');
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetName/composer_result.json',
+            __DIR__.'/fixture/composerSetName/composer.json'
+        );
+        self::assertSame('foo/bar', $composer->getName());
+    }
 }
