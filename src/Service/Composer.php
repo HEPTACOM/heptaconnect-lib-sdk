@@ -38,6 +38,35 @@ class Composer
         return $this->read()['name'] ?? null;
     }
 
+    public function setKeywords(array $keywords): void
+    {
+        $projectComposerJson = $this->read();
+        $projectComposerJson['keywords'] = \array_values($keywords);
+
+        $this->write($projectComposerJson);
+    }
+
+    public function addKeyword(string $keyword): void
+    {
+        $keywords = $this->getKeywords() ?? [];
+        $keywords[] = $keyword;
+
+        $this->setKeywords($keywords);
+    }
+
+    public function removeKeyword(string $keyword): void
+    {
+        $keywords = $this->getKeywords() ?? [];
+        $keywords = \array_diff($keywords, [$keyword]);
+
+        $this->setKeywords($keywords);
+    }
+
+    public function getKeywords(): ?array
+    {
+        return $this->read()['keywords'] ?? null;
+    }
+
     public function requirePackage(string $package, string $constraint): void
     {
         $projectComposerJson = $this->read();

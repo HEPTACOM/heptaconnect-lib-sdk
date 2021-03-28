@@ -60,4 +60,32 @@ class ComposerTest extends TestCase
         );
         self::assertSame('foo/bar', $composer->getName());
     }
+
+    public function testSetKeywords(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetKeywords/composer_init.json', __DIR__.'/fixture/composerSetKeywords/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetKeywords/composer.json');
+        self::assertEquals(['fuu', 'baz'], $composer->getKeywords());
+        $composer->setKeywords(['foo', 'bar']);
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetKeywords/composer_result.json',
+            __DIR__.'/fixture/composerSetKeywords/composer.json'
+        );
+        self::assertEquals(['foo', 'bar'], $composer->getKeywords());
+    }
+
+    public function testAddAndRemoveKeywords(): void
+    {
+        \copy(__DIR__.'/fixture/composerAddAndRemoveKeywords/composer_init.json', __DIR__.'/fixture/composerAddAndRemoveKeywords/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerAddAndRemoveKeywords/composer.json');
+        $composer->addKeyword('foodle');
+        $composer->removeKeyword('doodle');
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerAddAndRemoveKeywords/composer_result.json',
+            __DIR__.'/fixture/composerAddAndRemoveKeywords/composer.json'
+        );
+        self::assertEquals(['foo', 'bar', 'foodle'], $composer->getKeywords());
+    }
 }
