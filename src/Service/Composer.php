@@ -67,6 +67,35 @@ class Composer
         return $this->read()['keywords'] ?? null;
     }
 
+    public function setExtra(array $extra): void
+    {
+        $projectComposerJson = $this->read();
+        $projectComposerJson['extra'] = $extra;
+
+        $this->write($projectComposerJson);
+    }
+
+    public function setExtraValue(string $key, $value): void
+    {
+        $extra = $this->getExtra() ?? [];
+        $extra[$key] = $value;
+
+        $this->setExtra($extra);
+    }
+
+    public function removeExtraValue(string $key): void
+    {
+        $extra = $this->getExtra() ?? [];
+        unset($extra[$key]);
+
+        $this->setExtra($extra);
+    }
+
+    public function getExtra(): ?array
+    {
+        return $this->read()['extra'] ?? null;
+    }
+
     public function requirePackage(string $package, string $constraint): void
     {
         $projectComposerJson = $this->read();

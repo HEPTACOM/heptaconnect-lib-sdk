@@ -88,4 +88,32 @@ class ComposerTest extends TestCase
         );
         self::assertEquals(['foo', 'bar', 'foodle'], $composer->getKeywords());
     }
+
+    public function testSetExtra(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetExtra/composer_init.json', __DIR__.'/fixture/composerSetExtra/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetExtra/composer.json');
+        self::assertEquals(['fuu' => 'baz'], $composer->getExtra());
+        $composer->setExtra(['foo' => 'bar']);
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetExtra/composer_result.json',
+            __DIR__.'/fixture/composerSetExtra/composer.json'
+        );
+        self::assertEquals(['foo' => 'bar'], $composer->getExtra());
+    }
+
+    public function testSetAndRemoveExtraValue(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetAndRemoveExtraValue/composer_init.json', __DIR__.'/fixture/composerSetAndRemoveExtraValue/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetAndRemoveExtraValue/composer.json');
+        $composer->setExtraValue('foodle', 'woodle');
+        $composer->removeExtraValue('doodle');
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetAndRemoveExtraValue/composer_result.json',
+            __DIR__.'/fixture/composerSetAndRemoveExtraValue/composer.json'
+        );
+        self::assertEquals(['foodle' => 'woodle', 'foo' => 'bar'], $composer->getExtra());
+    }
 }
