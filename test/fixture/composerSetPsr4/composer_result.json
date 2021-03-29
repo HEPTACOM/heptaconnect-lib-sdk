@@ -1,0 +1,7 @@
+{
+    "autoload": {
+        "psr4": {
+            "Heptacom\\": "heptacom/"
+        }
+    }
+}

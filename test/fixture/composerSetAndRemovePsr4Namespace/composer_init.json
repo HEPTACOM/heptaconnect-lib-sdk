@@ -1,0 +1,8 @@
+{
+    "autoload": {
+        "psr4": {
+            "Psr\\": "psr/",
+            "Php\\": "php/"
+        }
+    }
+}

@@ -116,4 +116,32 @@ class ComposerTest extends TestCase
         );
         self::assertEquals(['foodle' => 'woodle', 'foo' => 'bar'], $composer->getExtra());
     }
+
+    public function testSetPsr4(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetPsr4/composer_init.json', __DIR__.'/fixture/composerSetPsr4/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetPsr4/composer.json');
+        self::assertEquals(['Psr\\' => 'psr/'], $composer->getPsr4());
+        $composer->setPsr4(['Heptacom\\' => 'heptacom/']);
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetPsr4/composer_result.json',
+            __DIR__.'/fixture/composerSetPsr4/composer.json'
+        );
+        self::assertEquals(['Heptacom\\' => 'heptacom/'], $composer->getPsr4());
+    }
+
+    public function testSetAndRemovePsr4Namespace(): void
+    {
+        \copy(__DIR__.'/fixture/composerSetAndRemovePsr4Namespace/composer_init.json', __DIR__.'/fixture/composerSetAndRemovePsr4Namespace/composer.json');
+        $composer = new Composer(__DIR__.'/fixture/composerSetAndRemovePsr4Namespace/composer.json');
+        $composer->setPsr4Namespace('Heptacom\\', 'heptacom/');
+        $composer->removePsr4Namespace('Psr\\');
+
+        self::assertJsonFileEqualsJsonFile(
+            __DIR__.'/fixture/composerSetAndRemovePsr4Namespace/composer_result.json',
+            __DIR__.'/fixture/composerSetAndRemovePsr4Namespace/composer.json'
+        );
+        self::assertEquals(['Heptacom\\' => 'heptacom/', 'Php\\' => 'php/'], $composer->getPsr4());
+    }
 }

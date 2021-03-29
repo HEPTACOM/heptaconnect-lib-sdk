@@ -96,6 +96,40 @@ class Composer
         return $this->read()['extra'] ?? null;
     }
 
+    public function setPsr4(array $psr4): void
+    {
+        $projectComposerJson = $this->read();
+        $autoload = $projectComposerJson['autoload'] ?? [];
+        $autoload['psr4'] = $psr4;
+        $projectComposerJson['autoload'] = $autoload;
+
+        $this->write($projectComposerJson);
+    }
+
+    public function setPsr4Namespace(string $namespace, string $directory): void
+    {
+        $psr4 = $this->getPsr4() ?? [];
+        $psr4[$namespace] = $directory;
+
+        $this->setPsr4($psr4);
+    }
+
+    public function removePsr4Namespace(string $namespace): void
+    {
+        $psr4 = $this->getPsr4() ?? [];
+        unset($psr4[$namespace]);
+
+        $this->setPsr4($psr4);
+    }
+
+    public function getPsr4(): ?array
+    {
+        $projectComposerJson = $this->read();
+        $autoload = $projectComposerJson['autoload'] ?? [];
+
+        return $autoload['psr4'] ?? null;
+    }
+
     public function requirePackage(string $package, string $constraint): void
     {
         $projectComposerJson = $this->read();
