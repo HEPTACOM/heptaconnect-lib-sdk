@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
 
+use Heptacom\HeptaConnect\Sdk\Maker\Portal;
 use Heptacom\HeptaConnect\Sdk\Service\ComposerCommandline;
 use Heptacom\HeptaConnect\Sdk\Service\Git;
 use Symfony\Component\Console\Input\InputInterface;
@@ -179,25 +180,9 @@ class PackageInit extends BaseCommand
             return;
         }
 
-        $fileLocation = $sourceDir.'/Portal.php';
         $namespace = \rtrim($namespace, '\\');
-        $fqn = $namespace.'\\Portal';
-
-        $template = <<<"PHP"
-<?php declare(strict_types=1);
-
-namespace $namespace;
-
-use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalContract;
-
-class Portal extends PortalContract
-{
-}
-
-PHP;
-
-        \file_put_contents($fileLocation, $template);
-        $composerJson['extra']['heptaconnect']['portals'][] = $fqn;
+        Portal::make($sourceDir, $namespace);
+        $composerJson['extra']['heptaconnect']['portals'][] = $namespace.'\\Portal';
     }
 
     private function askForPackageType(SymfonyStyle $io): string
