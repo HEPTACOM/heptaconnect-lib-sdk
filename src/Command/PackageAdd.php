@@ -54,7 +54,7 @@ class PackageAdd extends BaseCommand
         }
 
         $composer = new Composer($projectComposerJsonPath);
-        $composer->addPathRepository($packageComposerJson['name']);
+        $composer->addPathRepository($workingDir);
         $composer->requirePackage($packageComposerJson['name'], '>=0.0.1');
 
         ComposerCommandline::update($output, $projectDir);
