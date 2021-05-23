@@ -29,15 +29,13 @@ if (!class_exists(ClassLoader::class, false) || !isset($classLoader) || !($class
     }
 }
 
-$envFile = __DIR__ . '/../.env';
+$envFile ??= __DIR__ . '/../.env';
 
 if (is_readable($envFile) && !is_dir($envFile)) {
-    (new Dotenv(true))->load(__DIR__ . '/../.env');
+    (new Dotenv(true))->load($envFile);
 }
 
-if (!isset($_SERVER['PROJECT_ROOT'])) {
-    $_SERVER['PROJECT_ROOT'] = dirname(__DIR__);
-}
+$_SERVER['PROJECT_ROOT'] ??= dirname(__DIR__);
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'prod', true);
@@ -59,7 +57,7 @@ $application = new class(new Kernel(
     'heptaconnect',
     '1.0.0-sdk',
     null,
-    dirname(__DIR__)
+    $_SERVER['PROJECT_ROOT']
 )) extends Application
 {
     const COMMAND_WHITELIST = [
