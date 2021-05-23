@@ -44,7 +44,7 @@ class Install extends Command
         EntityIndexerRegistry $entityIndexerRegistry,
         iterable $migrationSources
     ) {
-        parent::__construct(null);
+        parent::__construct();
         $this->dsn = $dsn;
         $this->vendorDir = $vendorDir;
         $this->cache = $cache;
