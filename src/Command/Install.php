@@ -7,13 +7,9 @@ use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\FetchMode;
-use Psr\Log\LoggerInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Shopware\Core\Framework\Migration\MigrationCollectionLoader;
-use Shopware\Core\Framework\Migration\MigrationRuntime;
 use Shopware\Core\Framework\Migration\MigrationSource;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,17 +17,18 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Install extends Command
 {
+    private const BLOCKED_MIGRATION_SOURCES = [
+        'core.',
+        'null',
+        'Framework',
+        'Storefront',
+    ];
+
     protected static $defaultName = 'sdk:install';
 
     private string $dsn;
 
     private string $vendorDir;
-
-    private TagAwareAdapterInterface $cache;
-
-    private LoggerInterface $logger;
-
-    private EntityIndexerRegistry $entityIndexerRegistry;
 
     /** @var array|iterable|\Traversable|MigrationSource[] */
     private array $migrationSources;
@@ -39,17 +36,11 @@ class Install extends Command
     public function __construct(
         string $dsn,
         string $vendorDir,
-        TagAwareAdapterInterface $cache,
-        LoggerInterface $logger,
-        EntityIndexerRegistry $entityIndexerRegistry,
         iterable $migrationSources
     ) {
         parent::__construct();
         $this->dsn = $dsn;
         $this->vendorDir = $vendorDir;
-        $this->cache = $cache;
-        $this->logger = $logger;
-        $this->entityIndexerRegistry = $entityIndexerRegistry;
         $this->migrationSources = iterable_to_array($migrationSources);
     }
 
@@ -87,13 +78,57 @@ class Install extends Command
         $connection = $this->getDatabaseLessConnection();
 
         $this->setupDatabase($io, $force, $connection);
-        $this->runMigrations($io, new MigrationCollectionLoader(
-            $connection,
-            new MigrationRuntime($connection, $this->logger),
-            $this->migrationSources
-        ));
-        $this->runIndexers($io);
-        $this->cache->clear();
+        $output->writeln('');
+
+        $commands = [];
+
+        foreach ($this->migrationSources as $migrationSource) {
+            foreach (self::BLOCKED_MIGRATION_SOURCES as $blockedMigrationSource) {
+                if (strpos($migrationSource->getName(), $blockedMigrationSource) === 0) {
+                    continue 2;
+                }
+            }
+
+            array_push($commands, ...[
+                [
+                    'command' => 'database:migrate',
+                    'identifier' => $migrationSource->getName(),
+                    '--all' => true,
+                ],
+                [
+                    'command' => 'database:migrate-destructive',
+                    'identifier' => $migrationSource->getName(),
+                    '--all' => true,
+                ]
+            ]);
+        }
+
+        array_push($commands, ...[
+            [
+                'command' => 'dal:refresh:index',
+            ],
+            [
+                'command' => 'user:create',
+                'allowedToFail' => true,
+                'username' => 'admin',
+                '--admin' => true,
+                '--password' => 'shopware',
+            ],
+            [
+                'command' => 'sales-channel:create:storefront',
+                'allowedToFail' => true,
+                '--name' => 'Storefront',
+                '--url' => $_SERVER['APP_URL'] ?? 'http://localhost',
+            ],
+            [
+                'command' => 'assets:install',
+            ],
+            [
+                'command' => 'cache:clear',
+            ],
+        ]);
+
+        $this->runCommands($commands, $output);
 
         return 0;
     }
@@ -173,52 +208,32 @@ class Install extends Command
         }
     }
 
-    /**
-     * @throws \Throwable
-     */
-    private function runMigrations(SymfonyStyle $io, MigrationCollectionLoader $loader): void
+    private function runCommands(array $commands, OutputInterface $output): int
     {
-        $io->section('Run migrations');
+        $application = $this->getApplication();
+        if ($application === null) {
+            throw new \RuntimeException('No application initialised');
+        }
 
-        foreach (['null', 'core', 'Framework', 'HeptaConnectStorage'] as $migrationSourceName) {
-            $collection = $loader->collect($migrationSourceName);
-            $collection->sync();
-            $total = \count($collection->getExecutableMigrations());
-            $io->progressStart($total);
+        foreach ($commands as $parameters) {
+            $output->writeln('');
 
-            try {
-                foreach ($collection->migrateInSteps() as $_return) {
-                    $io->progressAdvance();
-                }
-            } catch (\Throwable $e) {
-                $io->progressFinish();
-                throw $e;
-            }
-
-            $collection = $loader->collect($migrationSourceName);
-            $collection->sync();
-            $total = \count($collection->getExecutableDestructiveMigrations());
-            $io->progressStart($total);
+            $command = $application->find((string) $parameters['command']);
+            $allowedToFail = $parameters['allowedToFail'] ?? false;
+            unset($parameters['command'], $parameters['allowedToFail']);
 
             try {
-                foreach ($collection->migrateInSteps() as $_return) {
-                    $io->progressAdvance();
+                $returnCode = $command->run(new ArrayInput($parameters), $output);
+                if ($returnCode !== 0 && !$allowedToFail) {
+                    return $returnCode;
                 }
             } catch (\Throwable $e) {
-                $io->progressFinish();
-                throw $e;
+                if (!$allowedToFail) {
+                    throw $e;
+                }
             }
         }
 
-        $io->success('Successfully run migrations');
-    }
-
-    private function runIndexers(SymfonyStyle $io): void
-    {
-        $io->section('Run indexers');
-
-        $this->entityIndexerRegistry->index(false);
-
-        $io->success('Successfully run indexers');
+        return 0;
     }
 }

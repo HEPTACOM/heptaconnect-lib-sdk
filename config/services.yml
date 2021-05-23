@@ -14,9 +14,6 @@ services:
         arguments:
             - '%env(DATABASE_URL)%'
             - '%kernel.vendor_dir%'
-            - '@cache.object'
-            - '@monolog.logger'
-            - '@Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry'
             - !tagged_iterator shopware.migration_source
 
     Heptacom\HeptaConnect\Sdk\Command\SelfUpdate:
