@@ -47,6 +47,7 @@ class PackageInit extends BaseCommand
         $composerJson = \file_exists($composerJsonPath) ? \json_decode(\file_get_contents($composerJsonPath), true) : [];
 
         $composerJson['version'] = '0.0.1';
+        $composerJson['description'] = '';
         $packageType = $this->getPackageType($io, $composerJson);
         $this->getPackageName($io, $workingDir, $composerJson);
         $namespace = $this->getNamespace($io, $workingDir, $composerJson);
@@ -73,16 +74,23 @@ class PackageInit extends BaseCommand
                 return 1;
         }
 
-        $projectDir = \realpath($this->vendorDir.'/..');
+        if (\file_exists($projectComposerJsonPath = $this->vendorDir.'/../composer.json')) {
+            $projectComposerJson = \json_decode(\file_get_contents($projectComposerJsonPath), true);
 
-        if ($projectDir && \is_dir($localRepository = $projectDir.'/repos')) {
-            $composerJson['repositories']['heptaconnect-sources'] = [
-                'type' => 'path',
-                'url' => $localRepository.'/**',
-                'options' => [
-                    'symlink' => false,
-                ],
-            ];
+            if (isset($projectComposerJson['repositories']['heptaconnect-sources'])) {
+                $sources = $projectComposerJson['repositories']['heptaconnect-sources'];
+
+                if (isset($sources['type']) && $sources['type'] === 'path' && isset($sources['url'])) {
+                    $sourcesUrl = $sources['url'];
+
+                    if (\mb_strpos($sourcesUrl, '/') !== 0) {
+                        $sourcesUrl = \realpath(\dirname($projectComposerJsonPath)) . DIRECTORY_SEPARATOR . $sourcesUrl;
+                        $sources['url'] = $sourcesUrl;
+                    }
+                }
+
+                $composerJson['repositories']['heptaconnect-sources'] = $sources;
+            }
         }
 
         \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
