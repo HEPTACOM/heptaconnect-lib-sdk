@@ -23,15 +23,13 @@ class ExampleEmitter extends EmitterContract
         // TODO: Return FQCN of supported entity type.
     }
 
-    protected function run(MappingInterface $mapping, EmitContextInterface $context): ?DatasetEntityContract
+    protected function run(string $externalId, EmitContextInterface $context): ?DatasetEntityContract
     {
-        $primaryKey = $mapping->getExternalId();
-
         $container = $context->getContainer();
         /** @var ExamplePacker $examplePacker */
         $examplePacker = $container->get(ExamplePacker::class);
 
-        // TODO: Read from your data source using the primary key.
+        // TODO: Read from your data source using the external id.
         // some file / database / api magic ...
         $data = [];
 
@@ -101,7 +99,6 @@ declare(strict_types=1);
 namespace ___NAMESPACE___\Receiver;
 
 use Heptacom\HeptaConnect\Dataset\Base\Contract\DatasetEntityContract;
-use Heptacom\HeptaConnect\Portal\Base\Mapping\Contract\MappingInterface;
 use Heptacom\HeptaConnect\Portal\Base\Reception\Contract\ReceiveContextInterface;
 use Heptacom\HeptaConnect\Portal\Base\Reception\Contract\ReceiverContract;
 use ___NAMESPACE___\Unpacker\ExampleUnpacker;
@@ -113,12 +110,9 @@ class ExampleReceiver extends ReceiverContract
         // TODO: Return FQCN of supported entity type.
     }
 
-    protected function run(
-        MappingInterface $mapping,
-        DatasetEntityContract $entity,
-        ReceiveContextInterface $context
-    ): void {
-        $container = $context->getContainer($mapping);
+    protected function run(DatasetEntityContract $entity, ReceiveContextInterface $context): void
+    {
+        $container = $context->getContainer();
         /** @var ExampleUnpacker $exampleUnpacker */
         $exampleUnpacker = $container->get(ExampleUnpacker::class);
 
