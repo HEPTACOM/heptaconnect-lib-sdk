@@ -61,6 +61,12 @@
             "Heptacom\\HeptaConnect\\Test\\": "test/"
         }
     },
+    "repositories": {
+        "heptaconnect-sources": {
+            "type": "path",
+            "url": "../**"
+        }
+    },
     "bin": [
         "bin/heptaconnect-sdk"
     ]
