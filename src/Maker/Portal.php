@@ -13,11 +13,17 @@ namespace ___NAMESPACE___\Emitter;
 use Heptacom\HeptaConnect\Dataset\Base\Contract\DatasetEntityContract;
 use Heptacom\HeptaConnect\Portal\Base\Emission\Contract\EmitContextInterface;
 use Heptacom\HeptaConnect\Portal\Base\Emission\Contract\EmitterContract;
-use Heptacom\HeptaConnect\Portal\Base\Mapping\Contract\MappingInterface;
 use ___NAMESPACE___\Packer\ExamplePacker;
 
 class ExampleEmitter extends EmitterContract
 {
+    private ExamplePacker $packer;
+
+    public function __construct(ExamplePacker $packer)
+    {
+        $this->packer = $packer;
+    }
+
     public function supports(): string
     {
         // TODO: Return FQCN of supported entity type.
@@ -25,16 +31,12 @@ class ExampleEmitter extends EmitterContract
 
     protected function run(string $externalId, EmitContextInterface $context): ?DatasetEntityContract
     {
-        $container = $context->getContainer();
-        /** @var ExamplePacker $examplePacker */
-        $examplePacker = $container->get(ExamplePacker::class);
-
         // TODO: Read from your data source using the external id.
         // some file / database / api magic ...
         $data = [];
 
         // TODO: Convert the data into an entity object and return it.
-        return $examplePacker->pack($data);
+        return $this->packer->pack($data);
     }
 }
 
@@ -52,6 +54,13 @@ use ___NAMESPACE___\Packer\ExamplePacker;
 
 class ExampleExplorer extends ExplorerContract
 {
+    private ExamplePacker $packer;
+
+    public function __construct(ExamplePacker $packer)
+    {
+        $this->packer = $packer;
+    }
+
     public function supports(): string
     {
         // TODO: Return FQCN of supported entity type.
@@ -59,15 +68,11 @@ class ExampleExplorer extends ExplorerContract
 
     protected function run(ExploreContextInterface $context): iterable
     {
-        $container = $context->getContainer();
-        /** @var ExamplePacker $examplePacker */
-        $examplePacker = $container->get(ExamplePacker::class);
-
         // TODO: Either yield primary keys or full entity objects from your data source.
         // some file / database / api magic ...
 
         foreach ([] as $data) {
-            yield $examplePacker->pack($data);
+            yield $this->packer->pack($data);
         }
     }
 }
@@ -105,6 +110,13 @@ use ___NAMESPACE___\Unpacker\ExampleUnpacker;
 
 class ExampleReceiver extends ReceiverContract
 {
+    private ExampleUnpacker $unpacker;
+
+    public function __construct(ExampleUnpacker $unpacker)
+    {
+        $this->unpacker = $unpacker;
+    }
+
     public function supports(): string
     {
         // TODO: Return FQCN of supported entity type.
@@ -112,12 +124,8 @@ class ExampleReceiver extends ReceiverContract
 
     protected function run(DatasetEntityContract $entity, ReceiveContextInterface $context): void
     {
-        $container = $context->getContainer();
-        /** @var ExampleUnpacker $exampleUnpacker */
-        $exampleUnpacker = $container->get(ExampleUnpacker::class);
-
         // TODO: Convert the entity object into raw data.
-        $data = $exampleUnpacker->unpack($entity);
+        $data = $this->unpacker->unpack($entity);
 
         // TODO: Wite data to your data target.
         // some file / database / api magic ...
@@ -153,49 +161,10 @@ declare(strict_types=1);
 
 namespace ___NAMESPACE___;
 
-use Heptacom\HeptaConnect\Portal\Base\Emission\EmitterCollection;
-use Heptacom\HeptaConnect\Portal\Base\Exploration\ExplorerCollection;
 use Heptacom\HeptaConnect\Portal\Base\Portal\Contract\PortalContract;
-use Heptacom\HeptaConnect\Portal\Base\Reception\ReceiverCollection;
-use Psr\Container\ContainerInterface as C;
-use ___NAMESPACE___\Receiver\ExampleReceiver;
-use ___NAMESPACE___\Unpacker\ExampleUnpacker;
-use ___NAMESPACE___\Emitter\ExampleEmitter;
-use ___NAMESPACE___\Explorer\ExampleExplorer;
-use ___NAMESPACE___\Packer\ExamplePacker;
 
 class Portal extends PortalContract
 {
-    public function getExplorers(): ExplorerCollection
-    {
-        return new ExplorerCollection([
-            new ExampleExplorer(),
-        ]);
-    }
-
-    public function getEmitters(): EmitterCollection
-    {
-        return new EmitterCollection([
-            new ExampleEmitter(),
-        ]);
-    }
-
-    public function getReceivers(): ReceiverCollection
-    {
-        return new ReceiverCollection([
-            new ExampleReceiver(),
-        ]);
-    }
-
-    public function getServices(): array
-    {
-        $services = parent::getServices();
-
-        $services[ExamplePacker::class] = static fn (C $c): ExamplePacker => new ExamplePacker();
-        $services[ExampleUnpacker::class] = static fn (C $c): ExampleUnpacker => new ExampleUnpacker();
-
-        return $services;
-    }
 }
 
 PHP;
