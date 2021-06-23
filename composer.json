@@ -67,6 +67,12 @@
             "url": "../**"
         }
     },
+    "support": {
+        "issues": "https://github.com/HEPTACOM/heptaconnect-lib-sdk/issues",
+        "source": "https://github.com/HEPTACOM/heptaconnect-lib-sdk",
+        "docs": "https://connect.heptacom.de/",
+        "rss": "https://connect.heptacom.de/feed/rss2.xml"
+    },
     "bin": [
         "bin/heptaconnect-sdk"
     ]
