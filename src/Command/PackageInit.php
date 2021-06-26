@@ -85,7 +85,7 @@ class PackageInit extends BaseCommand
                     $sourcesUrl = $sources['url'];
 
                     if (\mb_strpos($sourcesUrl, '/') !== 0) {
-                        $sourcesUrl = \realpath(\dirname($projectComposerJsonPath)) . DIRECTORY_SEPARATOR . $sourcesUrl;
+                        $sourcesUrl = \realpath(\dirname($projectComposerJsonPath)).\DIRECTORY_SEPARATOR.$sourcesUrl;
                         $sources['url'] = $sourcesUrl;
                     }
                 }

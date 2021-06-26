@@ -41,7 +41,7 @@ class Install extends Command
         parent::__construct();
         $this->dsn = $dsn;
         $this->vendorDir = $vendorDir;
-        $this->migrationSources = iterable_to_array($migrationSources);
+        $this->migrationSources = \iterable_to_array($migrationSources);
     }
 
     protected function configure(): void
@@ -84,12 +84,12 @@ class Install extends Command
 
         foreach ($this->migrationSources as $migrationSource) {
             foreach (self::BLOCKED_MIGRATION_SOURCES as $blockedMigrationSource) {
-                if (strpos($migrationSource->getName(), $blockedMigrationSource) === 0) {
+                if (\strpos($migrationSource->getName(), $blockedMigrationSource) === 0) {
                     continue 2;
                 }
             }
 
-            array_push($commands, ...[
+            \array_push($commands, ...[
                 [
                     'command' => 'database:migrate',
                     'identifier' => $migrationSource->getName(),
@@ -99,11 +99,11 @@ class Install extends Command
                     'command' => 'database:migrate-destructive',
                     'identifier' => $migrationSource->getName(),
                     '--all' => true,
-                ]
+                ],
             ]);
         }
 
-        array_push($commands, ...[
+        \array_push($commands, ...[
             [
                 'command' => 'dal:refresh:index',
             ],

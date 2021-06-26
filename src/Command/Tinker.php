@@ -110,7 +110,7 @@ class Tinker extends Command
                 return \json_decode(\json_encode($object), true);
             },
             \Generator::class => function (\Generator $object) {
-                return iterable_to_array($object);
+                return \iterable_to_array($object);
             },
         ];
     }
