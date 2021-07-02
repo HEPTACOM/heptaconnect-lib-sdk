@@ -7,7 +7,7 @@
         "development",
         "sdk"
     ],
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": [
         "AGPL-3.0-or-later",
         "proprietary"
@@ -24,7 +24,7 @@
         "composer/package-versions-deprecated": "^1.8",
         "friendsofphp/php-cs-fixer": "^2.16",
         "fzaninotto/faker": "~1.8.0",
-        "heptacom/heptaconnect-bridge-shopware-platform": "^0.2",
+        "heptacom/heptaconnect-bridge-shopware-platform": "self.version",
         "kubawerlos/php-cs-fixer-custom-fixers": "^2.3",
         "mbezhanov/faker-provider-collection": "~1.2.1",
         "psy/psysh": "@stable",
