@@ -20,17 +20,24 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "bheller/images-generator": "~1.0.1",
+        "ext-mbstring": "*",
+        "bentools/iterable-functions": "^1.4",
+        "composer/composer": "^2",
         "composer/package-versions-deprecated": "^1.8",
+        "doctrine/dbal": ">=2.1",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "fzaninotto/faker": "~1.8.0",
         "heptacom/heptaconnect-bridge-shopware-platform": "self.version",
-        "kubawerlos/php-cs-fixer-custom-fixers": "^2.3",
-        "mbezhanov/faker-provider-collection": "~1.2.1",
+        "heptacom/heptaconnect-core": "self.version",
+        "heptacom/heptaconnect-portal-base": "self.version",
+        "heptacom/heptaconnect-storage-base": "self.version",
         "psy/psysh": "@stable",
-        "shopware/administration": "6.4.0.0",
-        "shopware/core": "6.4.0.0",
-        "shopware/storefront": "6.4.0.0"
+        "shopware/administration": "6.4.1.2",
+        "shopware/core": "6.4.1.2",
+        "shopware/storefront": "6.4.1.2",
+        "symfony/config": "^4.4|^5.0",
+        "symfony/console": "^4.4|^5.0",
+        "symfony/dependency-injection": "^4.4|^5.0",
+        "symfony/process": "^4.4|^5.0"
     },
     "conflict": {
         "nikic/php-parser": "4.7.0"
