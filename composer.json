@@ -22,7 +22,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "bentools/iterable-functions": "^1.4",
-        "composer/composer": "^2",
+        "composer/composer": ">=1",
         "composer/package-versions-deprecated": "^1.8",
         "doctrine/dbal": ">=2.1",
         "friendsofphp/php-cs-fixer": "^2.16",
