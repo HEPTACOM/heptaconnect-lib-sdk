@@ -4,7 +4,7 @@
 ## Description
 
 This is a HEPTAconnect package to assist working with the SDK as this supplies a runtime for the SDK to work in.
-Read more under [Overview](../heptaconnect-docs).
+Read more in the [documentation](https://heptaconnect.io/).
 
 
 ## System requirements
