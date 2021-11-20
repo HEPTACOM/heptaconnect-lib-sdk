@@ -34,10 +34,10 @@
         "shopware/administration": "6.4.1.2",
         "shopware/core": "6.4.1.2",
         "shopware/storefront": "6.4.1.2",
-        "symfony/config": "^4.4|^5.0",
-        "symfony/console": "^4.4|^5.0",
-        "symfony/dependency-injection": "^4.4|^5.0",
-        "symfony/process": "^4.4|^5.0"
+        "symfony/config": "^4.4 || ^5.0",
+        "symfony/console": "^4.4 || ^5.0",
+        "symfony/dependency-injection": "^4.4 || ^5.0",
+        "symfony/process": "^4.4 || ^5.0"
     },
     "conflict": {
         "nikic/php-parser": "4.7.0"
@@ -75,14 +75,14 @@
             "url": "../**"
         }
     },
+    "bin": [
+        "bin/heptaconnect-sdk"
+    ],
     "support": {
         "issues": "https://github.com/HEPTACOM/heptaconnect-lib-sdk/issues",
         "source": "https://github.com/HEPTACOM/heptaconnect-lib-sdk",
         "docs": "https://connect.heptacom.de/",
         "rss": "https://connect.heptacom.de/feed/rss2.xml"
     },
-    "website": "https://heptaconnect.io",
-    "bin": [
-        "bin/heptaconnect-sdk"
-    ]
+    "website": "https://heptaconnect.io"
 }

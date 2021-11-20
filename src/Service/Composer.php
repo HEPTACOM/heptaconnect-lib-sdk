@@ -181,7 +181,7 @@ class Composer
 
     public function write(array $content): void
     {
-        \file_put_contents($this->file, \json_encode($content, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
+        \file_put_contents($this->file, \json_encode($content, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES) . \PHP_EOL);
     }
 
     private function read(): array

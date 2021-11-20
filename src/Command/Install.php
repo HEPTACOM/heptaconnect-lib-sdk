@@ -55,8 +55,8 @@ class Install extends Command
         $force = (bool) $input->getOption('force');
 
         if (
-            ($binaryPath = \realpath($this->vendorDir.'/../bin/heptaconnect-sdk')) === false
-            && ($binaryPath = \realpath($this->vendorDir.'/bin/heptaconnect-sdk')) === false
+            ($binaryPath = \realpath($this->vendorDir . '/../bin/heptaconnect-sdk')) === false
+            && ($binaryPath = \realpath($this->vendorDir . '/bin/heptaconnect-sdk')) === false
         ) {
             $io->error('Unable to find SDK binary.');
 
@@ -138,7 +138,7 @@ class Install extends Command
         $path = \explode(':', (string) \getenv('PATH'));
 
         foreach (\array_reverse($path) as $directory) {
-            $symlink = $directory.'/heptaconnect-sdk';
+            $symlink = $directory . '/heptaconnect-sdk';
 
             try {
                 if (\is_writable($directory) && \symlink($binaryPath, $symlink)) {
@@ -179,7 +179,7 @@ class Install extends Command
             'url' => \sprintf(
                 '%s://%s%s:%s',
                 $params['scheme'],
-                isset($params['pass'], $params['user']) ? ($params['user'].':'.$params['pass'].'@') : '',
+                isset($params['pass'], $params['user']) ? ($params['user'] . ':' . $params['pass'] . '@') : '',
                 $params['host'],
                 $params['port'] ?? 3306
             ),
@@ -193,17 +193,17 @@ class Install extends Command
         $io->section('Setup database');
 
         if ($io->confirm(\sprintf('Is it ok to create %s?', $dbName), $force)) {
-            $connection->executeUpdate('CREATE DATABASE IF NOT EXISTS `'.$dbName.'` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`');
-            $io->success('Created database `'.$dbName.'`');
+            $connection->executeUpdate('CREATE DATABASE IF NOT EXISTS `' . $dbName . '` CHARACTER SET `utf8mb4` COLLATE `utf8mb4_unicode_ci`');
+            $io->success('Created database `' . $dbName . '`');
         }
 
-        $connection->exec('USE `'.$dbName.'`');
+        $connection->exec('USE `' . $dbName . '`');
 
         $tables = $connection->query('SHOW TABLES')->fetchAll(FetchMode::COLUMN);
 
         if (!\in_array('migration', $tables, true)) {
             $io->writeln('Importing base schema.sql');
-            $connection->exec(\file_get_contents($this->vendorDir.'/shopware/core/schema.sql'));
+            $connection->exec(\file_get_contents($this->vendorDir . '/shopware/core/schema.sql'));
             $io->success('Importing base schema.sql');
         }
     }

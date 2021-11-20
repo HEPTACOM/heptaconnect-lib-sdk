@@ -31,7 +31,7 @@ class PackageAdd extends BaseCommand
             return 1;
         }
 
-        if (!\file_exists($packageComposerJsonPath = $workingDir.'/composer.json')) {
+        if (!\file_exists($packageComposerJsonPath = $workingDir . '/composer.json')) {
             $io->error(\sprintf('Failed to locate composer.json file in %s.', $workingDir));
 
             return 1;
@@ -45,10 +45,10 @@ class PackageAdd extends BaseCommand
             return 1;
         }
 
-        $projectDir = \realpath($this->vendorDir.'/..');
+        $projectDir = \realpath($this->vendorDir . '/..');
 
-        if (!$projectDir || !\file_exists($projectComposerJsonPath = $projectDir.'/composer.json')) {
-            $io->error(\sprintf('Failed to locate composer.json file in %s.', $this->vendorDir.'/..'));
+        if (!$projectDir || !\file_exists($projectComposerJsonPath = $projectDir . '/composer.json')) {
+            $io->error(\sprintf('Failed to locate composer.json file in %s.', $this->vendorDir . '/..'));
 
             return 1;
         }

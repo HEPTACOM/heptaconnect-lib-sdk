@@ -44,7 +44,7 @@ class PackageInit extends BaseCommand
             return 1;
         }
 
-        $composerJsonPath = $workingDir.'/composer.json';
+        $composerJsonPath = $workingDir . '/composer.json';
         $composerJson = \file_exists($composerJsonPath) ? \json_decode(\file_get_contents($composerJsonPath), true) : [];
 
         $composerJson['version'] = '0.0.1';
@@ -75,7 +75,7 @@ class PackageInit extends BaseCommand
                 return 1;
         }
 
-        if (\file_exists($projectComposerJsonPath = $this->vendorDir.'/../composer.json')) {
+        if (\file_exists($projectComposerJsonPath = $this->vendorDir . '/../composer.json')) {
             $projectComposerJson = \json_decode(\file_get_contents($projectComposerJsonPath), true);
 
             if (isset($projectComposerJson['repositories']['heptaconnect-sources'])) {
@@ -85,7 +85,7 @@ class PackageInit extends BaseCommand
                     $sourcesUrl = $sources['url'];
 
                     if (\mb_strpos($sourcesUrl, '/') !== 0) {
-                        $sourcesUrl = \realpath(\dirname($projectComposerJsonPath)).\DIRECTORY_SEPARATOR.$sourcesUrl;
+                        $sourcesUrl = \realpath(\dirname($projectComposerJsonPath)) . \DIRECTORY_SEPARATOR . $sourcesUrl;
                         $sources['url'] = $sourcesUrl;
                     }
                 }
@@ -94,13 +94,13 @@ class PackageInit extends BaseCommand
             }
         }
 
-        \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES).\PHP_EOL);
+        \file_put_contents($composerJsonPath, \json_encode($composerJson, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES) . \PHP_EOL);
         ComposerCommandline::update($output, $workingDir);
 
-        \file_put_contents($workingDir.'/.gitignore', \implode(\PHP_EOL, [
+        \file_put_contents($workingDir . '/.gitignore', \implode(\PHP_EOL, [
             '/vendor/',
             'composer.lock',
-        ]).\PHP_EOL);
+        ]) . \PHP_EOL);
         Git::init($output, $workingDir);
 
         return 0;
@@ -132,7 +132,7 @@ class PackageInit extends BaseCommand
             return $composerJson['name'];
         }
 
-        $nameSuggestion = \get_current_user().'/'.\basename($workingDir);
+        $nameSuggestion = \get_current_user() . '/' . \basename($workingDir);
 
         return $composerJson['name'] = (string) $io->ask('Give your package a name.', $nameSuggestion);
     }
@@ -151,11 +151,11 @@ class PackageInit extends BaseCommand
         }, \explode('/', $composerJson['name'])));
 
         $namespace = (string) $io->ask('Specify a PSR-4 compliant namespace.', $suggestion);
-        $namespace = \trim($namespace, '\\').'\\';
+        $namespace = \trim($namespace, '\\') . '\\';
 
         $composerJson['autoload']['psr-4'][$namespace] = 'src/';
 
-        $sourceDir = $workingDir.'/'.$composerJson['autoload']['psr-4'][$namespace];
+        $sourceDir = $workingDir . '/' . $composerJson['autoload']['psr-4'][$namespace];
 
         if (!\is_dir($sourceDir)) {
             \mkdir($sourceDir, 0775, true);
@@ -172,7 +172,7 @@ class PackageInit extends BaseCommand
             return;
         }
 
-        $sourceDir = $workingDir.'/'.$composerJson['autoload']['psr-4'][$namespace];
+        $sourceDir = $workingDir . '/' . $composerJson['autoload']['psr-4'][$namespace];
 
         if (!\is_dir($sourceDir) && !\mkdir($sourceDir, 0775, true)) {
             $io->warning(\sprintf('A portal could not be created, because the source directory is not writable: %s', $sourceDir));
@@ -182,7 +182,7 @@ class PackageInit extends BaseCommand
 
         $namespace = \rtrim($namespace, '\\');
         Portal::make($sourceDir, $namespace);
-        $composerJson['extra']['heptaconnect']['portals'][] = $namespace.'\\Portal';
+        $composerJson['extra']['heptaconnect']['portals'][] = $namespace . '\\Portal';
     }
 
     private function askForPackageType(SymfonyStyle $io): string

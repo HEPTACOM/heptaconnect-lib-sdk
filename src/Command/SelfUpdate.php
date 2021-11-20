@@ -25,8 +25,8 @@ class SelfUpdate extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        if (($projectDir = \realpath($this->vendorDir.'/../')) === false) {
-            $io->error(\sprintf('Unable to find the SDK project directory (%s).', $this->vendorDir.'/../'));
+        if (($projectDir = \realpath($this->vendorDir . '/../')) === false) {
+            $io->error(\sprintf('Unable to find the SDK project directory (%s).', $this->vendorDir . '/../'));
 
             return 1;
         }

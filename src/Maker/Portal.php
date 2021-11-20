@@ -172,11 +172,11 @@ PHP;
 
     public static function make(string $sourceDir, string $namespace): void
     {
-        self::makeEmitter($sourceDir.'/Emitter', $namespace);
-        self::makeExplorer($sourceDir.'/Explorer', $namespace);
-        self::makePacker($sourceDir.'/Packer', $namespace);
-        self::makeReceiver($sourceDir.'/Receiver', $namespace);
-        self::makeUnpacker($sourceDir.'/Unpacker', $namespace);
+        self::makeEmitter($sourceDir . '/Emitter', $namespace);
+        self::makeExplorer($sourceDir . '/Explorer', $namespace);
+        self::makePacker($sourceDir . '/Packer', $namespace);
+        self::makeReceiver($sourceDir . '/Receiver', $namespace);
+        self::makeUnpacker($sourceDir . '/Unpacker', $namespace);
         self::makePortal($sourceDir, $namespace);
     }
 
@@ -259,6 +259,6 @@ PHP;
 
         $fileContent = \str_replace($placeholders, $replacements, $template);
 
-        \file_put_contents($directory.'/'.$fileName, $fileContent);
+        \file_put_contents($directory . '/' . $fileName, $fileContent);
     }
 }
