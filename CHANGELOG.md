@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2021-11-22
+
+### Changed
+
+- Loosen constraints on other HEPTAconnect packages and on Shopware (`heptacom/heptaconnect-bridge-shopware-platform:^0.8`, `heptacom/heptaconnect-core:^0.8`, `heptacom/heptaconnect-portal-base:^0.8`, `heptacom/heptaconnect-storage-base:^0.8`, `shopware/administration:~6.4`, `shopware/core:~6.4`, `shopware/storefront:~6.4`)
+
 ## [0.8.0] - 2021-11-22
 
 ## [0.7.0] - 2021-09-25
