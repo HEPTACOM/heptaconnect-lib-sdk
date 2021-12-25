@@ -6,6 +6,7 @@ namespace Heptacom\HeptaConnect\Sdk\Command;
 use Heptacom\HeptaConnect\Core\Portal\Contract\PortalRegistryInterface;
 use Heptacom\HeptaConnect\Core\StatusReporting\Contract\StatusReportingContextFactoryInterface;
 use Heptacom\HeptaConnect\Portal\Base\StorageKey\Contract\PortalNodeKeyInterface;
+use Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Listing\PortalNodeListActionInterface;
 use Heptacom\HeptaConnect\Storage\Base\Contract\Repository\PortalNodeRepositoryContract;
 use Heptacom\HeptaConnect\Storage\Base\Contract\StorageKeyGeneratorContract;
 use Psy\Configuration;
@@ -30,17 +31,21 @@ class Tinker extends Command
 
     private StatusReportingContextFactoryInterface $statusReportingContextFactory;
 
+    private PortalNodeListActionInterface $portalNodeListAction;
+
     public function __construct(
         PortalNodeRepositoryContract $portalNodeRepository,
         StorageKeyGeneratorContract $storageKeyGenerator,
         PortalRegistryInterface $portalRegistry,
-        StatusReportingContextFactoryInterface $statusReportingContextFactory
+        StatusReportingContextFactoryInterface $statusReportingContextFactory,
+        PortalNodeListActionInterface $portalNodeListAction
     ) {
         parent::__construct();
         $this->portalNodeRepository = $portalNodeRepository;
         $this->storageKeyGenerator = $storageKeyGenerator;
         $this->portalRegistry = $portalRegistry;
         $this->statusReportingContextFactory = $statusReportingContextFactory;
+        $this->portalNodeListAction = $portalNodeListAction;
     }
 
     protected function configure()
@@ -87,7 +92,7 @@ class Tinker extends Command
             $portalNodeKeys = [];
             $portalNodeClasses = [];
 
-            foreach ($this->portalNodeRepository->listAll() as $portalNodeKey) {
+            foreach ($this->portalNodeListAction->list() as $portalNodeKey) {
                 $portalNodeKeys[$this->storageKeyGenerator->serialize($portalNodeKey)] = $portalNodeKey;
                 $portalNodeClasses[$this->storageKeyGenerator->serialize($portalNodeKey)] = $this->portalNodeRepository->read($portalNodeKey);
             }
