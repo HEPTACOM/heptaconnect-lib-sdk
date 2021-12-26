@@ -6,8 +6,11 @@ namespace Heptacom\HeptaConnect\Sdk\Command;
 use Heptacom\HeptaConnect\Core\Portal\Contract\PortalRegistryInterface;
 use Heptacom\HeptaConnect\Core\StatusReporting\Contract\StatusReportingContextFactoryInterface;
 use Heptacom\HeptaConnect\Portal\Base\StorageKey\Contract\PortalNodeKeyInterface;
+use Heptacom\HeptaConnect\Portal\Base\StorageKey\PortalNodeKeyCollection;
+use Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Get\PortalNodeGetActionInterface;
+use Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Get\PortalNodeGetCriteria;
 use Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Listing\PortalNodeListActionInterface;
-use Heptacom\HeptaConnect\Storage\Base\Contract\Repository\PortalNodeRepositoryContract;
+use Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Listing\PortalNodeListResult;
 use Heptacom\HeptaConnect\Storage\Base\Contract\StorageKeyGeneratorContract;
 use Psy\Configuration;
 use Psy\Shell;
@@ -23,8 +26,6 @@ class Tinker extends Command
 
     protected SymfonyStyle $io;
 
-    private PortalNodeRepositoryContract $portalNodeRepository;
-
     private StorageKeyGeneratorContract $storageKeyGenerator;
 
     private PortalRegistryInterface $portalRegistry;
@@ -33,19 +34,21 @@ class Tinker extends Command
 
     private PortalNodeListActionInterface $portalNodeListAction;
 
+    private PortalNodeGetActionInterface $portalNodeGetAction;
+
     public function __construct(
-        PortalNodeRepositoryContract $portalNodeRepository,
         StorageKeyGeneratorContract $storageKeyGenerator,
         PortalRegistryInterface $portalRegistry,
         StatusReportingContextFactoryInterface $statusReportingContextFactory,
-        PortalNodeListActionInterface $portalNodeListAction
+        PortalNodeListActionInterface $portalNodeListAction,
+        PortalNodeGetActionInterface $portalNodeGetAction
     ) {
         parent::__construct();
-        $this->portalNodeRepository = $portalNodeRepository;
         $this->storageKeyGenerator = $storageKeyGenerator;
         $this->portalRegistry = $portalRegistry;
         $this->statusReportingContextFactory = $statusReportingContextFactory;
         $this->portalNodeListAction = $portalNodeListAction;
+        $this->portalNodeGetAction = $portalNodeGetAction;
     }
 
     protected function configure()
@@ -92,9 +95,17 @@ class Tinker extends Command
             $portalNodeKeys = [];
             $portalNodeClasses = [];
 
-            foreach ($this->portalNodeListAction->list() as $portalNodeKey) {
-                $portalNodeKeys[$this->storageKeyGenerator->serialize($portalNodeKey)] = $portalNodeKey;
-                $portalNodeClasses[$this->storageKeyGenerator->serialize($portalNodeKey)] = $this->portalNodeRepository->read($portalNodeKey);
+            $portalNodes = $this->portalNodeGetAction->get(new PortalNodeGetCriteria(new PortalNodeKeyCollection(
+                \iterable_map(
+                    $this->portalNodeListAction->list(),
+                    static fn (PortalNodeListResult $r): PortalNodeKeyInterface => $r->getPortalNodeKey()
+                )
+            )));
+
+            foreach ($portalNodes as $portalNode) {
+                $portalNodeKey = $this->storageKeyGenerator->serialize($portalNode->getPortalNodeKey());
+                $portalNodeKeys[$portalNodeKey] = $portalNode->getPortalNodeKey();
+                $portalNodeClasses[$portalNodeKey] = $portalNode->getPortalClass();
             }
 
             $portalNodeKeyString = $this->io->choice('Select a portal node.', $portalNodeClasses);
