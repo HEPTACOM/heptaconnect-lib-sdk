@@ -30,10 +30,11 @@ services:
 
     Heptacom\HeptaConnect\Sdk\Command\Tinker:
         arguments:
-            - '@Heptacom\HeptaConnect\Storage\ShopwareDal\Repository\PortalNodeRepository'
             - '@Heptacom\HeptaConnect\Bridge\ShopwarePlatform\Support\AliasStorageKeyGenerator'
             - '@Heptacom\HeptaConnect\Core\Portal\PortalRegistry'
             - '@Heptacom\HeptaConnect\Core\StatusReporting\StatusReportingContextFactory'
+            - '@Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Listing\PortalNodeListActionInterface'
+            - '@Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Get\PortalNodeGetActionInterface'
 
     Shopware\Core\Framework\Store\Services\OpenSSLVerifier:
         arguments:
