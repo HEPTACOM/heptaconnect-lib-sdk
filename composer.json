@@ -71,5 +71,10 @@
     "bin": [
         "bin/heptaconnect-sdk"
     ],
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
     "website": "https://heptaconnect.io"
 }
