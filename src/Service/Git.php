@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Service;
@@ -16,7 +17,7 @@ class Git
             [],
             null,
             null
-        )->mustRun(function (string $type, string $data) use ($output) {
+        )->mustRun(function (string $type, string $data) use ($output): void {
             $output->write($data);
         });
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
@@ -30,7 +31,9 @@ class Install extends Command
 
     private string $vendorDir;
 
-    /** @var array|iterable|\Traversable|MigrationSource[] */
+    /**
+     * @var array|iterable|\Traversable|MigrationSource[]
+     */
     private array $migrationSources;
 
     public function __construct(

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
@@ -12,13 +13,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class PackageInit extends BaseCommand
 {
-    const KEYWORD_DATASET = 'heptaconnect-dataset';
+    public const KEYWORD_DATASET = 'heptaconnect-dataset';
 
-    const KEYWORD_PORTAL = 'heptaconnect-portal';
+    public const KEYWORD_PORTAL = 'heptaconnect-portal';
 
-    const KEYWORD_STORAGE = 'heptaconnect-storage';
+    public const KEYWORD_STORAGE = 'heptaconnect-storage';
 
-    const VALID_KEYWORDS = [
+    public const VALID_KEYWORDS = [
         self::KEYWORD_DATASET,
         self::KEYWORD_PORTAL,
         self::KEYWORD_STORAGE,
@@ -143,7 +144,7 @@ class PackageInit extends BaseCommand
             return (string) \key($composerJson['autoload']['psr-4']);
         }
 
-        $suggestion = \join('\\', \array_map(function (string $name): string {
+        $suggestion = \implode('\\', \array_map(function (string $name): string {
             $name = \str_replace(['-', '_'], ' ', $name);
             $name = \ucwords($name);
 

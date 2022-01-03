@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Heptacom\HeptaConnect\Sdk\Command;
@@ -51,7 +52,7 @@ class Tinker extends Command
         $this->portalNodeGetAction = $portalNodeGetAction;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('portal-node', InputArgument::OPTIONAL, 'Specify a portal node to tinker with');
     }
