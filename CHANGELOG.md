@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Use `\Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Get\PortalNodeGetActionInterface` and `\Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\Listing\PortalNodeListActionInterface` in `\Heptacom\HeptaConnect\Sdk\Command\Tinker` instead of `\Heptacom\HeptaConnect\Storage\Base\Contract\Repository\PortalNodeRepositoryContract`
+- Use `\Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\PortalNodeGetActionInterface` and `\Heptacom\HeptaConnect\Storage\Base\Contract\Action\PortalNode\PortalNodeListActionInterface` in `\Heptacom\HeptaConnect\Sdk\Command\Tinker` instead of `\Heptacom\HeptaConnect\Storage\Base\Contract\Repository\PortalNodeRepositoryContract`
 
 ## [0.8.1] - 2021-11-22
 
